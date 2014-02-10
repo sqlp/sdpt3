@@ -12,3 +12,4 @@ This repo is administered by [Michael Grant](http://cvxr.com/bio), the developer
 
 While you are welcome to submit bug reports on the [GitHub issue page](https://github.com/mcg1969/SDPT3/issues) for this repo, we cannot guarantee that they will be addressed in a timely fashion.
 
+This version of SDPT3 is distributed under the GNU General Public License 2.0. For more details, please see the included files [Copyright](https://github.com/mcg1969/SDPT3/blob/master/Copyright) and [GNU_General_Public_License_v2](https://github.com/mcg1969/SDPT3/blob/master/GNU_General_Public_License_v2).
