@@ -1,4 +1,4 @@
-# SDPT3 version 4.0: MATLAB software for semidefinite-quadratic-linear programming
+## SDPT3 version 4.0: MATLAB software for semidefinite-quadratic-linear programming
 ### [Kim-Chuan Toh](http://www.math.nus.edu.sg/~mattohkc/index.html), [Michael J. Todd](http://people.orie.cornell.edu/miketodd/todd.html), and [Reha H. Tütüncü](http://www.math.cmu.edu/~reha/)
 
 SDPT3 is a Matlab package for solving convex optimization problems involving linear equations and inequalities, second-order cone constraints, and semidefinite constraints (linear matrix inequalities).
