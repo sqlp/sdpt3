@@ -444,7 +444,11 @@ void mexFunction(int nlhs,   mxArray  *plhs[],
      if (isspB) {
         /*** if isspB, (actual B) = B+B' ****/ 
         mexCallMATLAB(1, &rhs[1], 1, &rhs[0], "ctranspose"); 
-        mexCallMATLAB(1, &plhs[0],2, rhs, "+");  
+#if defined HAVE_OCTAVE
+        mexCallMATLAB(1, &plhs[0],2, rhs, "plus");  
+#else
+       mexCallMATLAB(1, &plhs[0],2, rhs, "+");  
+#endif
         mxDestroyArray(*rhs); 
      }
      mxFree(blknnz); 

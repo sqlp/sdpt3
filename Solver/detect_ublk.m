@@ -40,7 +40,6 @@ for p = 1:numblk
         ApTr = (r*Ap)';
         [sApTr,perm] = sort(abs(ApTr));
         idx0 = find(abs(diff(sApTr)) < tol);
-        % i1 = []; i2 = [];
         if ~isempty(idx0)
             n = pblk{2};
             i1 = perm(idx0); i2 = perm(idx0+1);
@@ -48,8 +47,8 @@ for p = 1:numblk
             Api2 = Ap(:,i2);
             Cpi1 = Cp(i1)';
             Cpi2 = Cp(i2)';
-            idxzr = find(abs(Cpi1+Cpi2) < tol && sum(abs(Api1+Api2),1) < tol);
-            if ~isempty(idxzr)
+            idxzr = abs(Cpi1+Cpi2) < tol & sum(abs(Api1+Api2),1) < tol;
+            if any(idxzr)
                 i1 = i1(idxzr');
                 i2 = i2(idxzr');
                 blk2{p,1} = 'u';

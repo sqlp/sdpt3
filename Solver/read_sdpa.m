@@ -87,9 +87,9 @@ b = -b;
 %% Construct blk
 %%
 deblksize = 100;
-spblkidxtmp = find( (blksize>1) && (blksize < deblksize) );
+spblkidxtmp = find( (blksize>1) & (blksize < deblksize) );
 spblkidxtmp = sort(spblkidxtmp);
-deblkidx = find( (blksize<=1) || (blksize >= deblksize) );
+deblkidx = find( (blksize<=1) | (blksize >= deblksize) );
 denumblk = length(deblkidx);
 linblkidx = zeros(1,denumblk);
 for p = 1:denumblk

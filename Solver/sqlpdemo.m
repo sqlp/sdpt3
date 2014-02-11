@@ -89,7 +89,7 @@ for trials = 1:ntrials
         end;
         h = plotgap(Gap,Feas);
         xlabel(text);
-        legend(h(h>0),legendtext{:});
+        legend(h(h~=0),legendtext{:});
         fprintf('\n**** press enter to continue ****\n'); pause
     end
 end
