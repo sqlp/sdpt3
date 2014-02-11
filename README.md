@@ -13,7 +13,7 @@ This repo is administered by [Michael Grant](http://cvxr.com/bio), the developer
 Having said that, this distribution *does* differ from the release currently posted on the main site in several ways:
 
    + *Preliminary* support for Octave 3.8.0 and later has been added. While we have found that it works well,
-     you shoudl expect an occasional error or incompatibility simple due to a lack of testing.
+     you should expect an occasional error or incompatibility simple due to a lack of testing.
    + The installer has been replaced. The new installer will build the MEX files only if they are not already
      present (or unless a "-rebuild" flag is given). It will also set the MATLAB paths, if necessary.
      *At this point, Octave users will need to build their own MEX files.*
