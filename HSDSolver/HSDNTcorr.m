@@ -19,7 +19,7 @@
 %%
     solve_ok = 1; resnrm = norm(rhs);
     [xx,resnrm,solve_ok] = HSDbicgstab(coeff,rhs,L,[],[],printlevel);
-    if (solve_ok<=0) & (printlevel)
+    if (solve_ok<=0) && (printlevel)
        fprintf('\n  warning: iterative solver fails: %3.1f.',solve_ok); 
     end
     if (par.printlevel>=3); fprintf(' %2.0f',length(resnrm)-1); end

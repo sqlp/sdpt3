@@ -48,7 +48,7 @@
     if (nargin < 5); OPTIONS = []; end
     
     isemptyAtb = 0; 
-    if isempty(At) & isempty(b);
+    if isempty(At) && isempty(b);
        %% Add redundant constraint: <-I,X> <= 0
        b = 0; 
        At = ops(ops(blk,'identity'),'*',-1);  
@@ -65,7 +65,7 @@
    warning off; 
 
    matlabversion = sscanf(version,'%f');
-   if strcmp(computer,'PCWIN64') | strcmp(computer,'GLNXA64')
+   if strcmp(computer,'PCWIN64') || strcmp(computer,'GLNXA64')
       par.computer = 64; 
    else
       par.computer = 32; 
@@ -91,9 +91,9 @@
    parbarrier  = cell(size(blk,1),1); 
    for p = 1:size(blk,1)
       pblk = blk(p,:); 
-      if strcmp(pblk{1},'s') | strcmp(pblk{1},'q')
+      if strcmp(pblk{1},'s') || strcmp(pblk{1},'q')
          parbarrier{p} = zeros(1,length(pblk{2}));
-      elseif strcmp(pblk{1},'l') | strcmp(pblk{1},'u' )
+      elseif strcmp(pblk{1},'l') || strcmp(pblk{1},'u' )
          parbarrier{p} = zeros(1,sum(pblk{2}));
       end
    end
@@ -144,7 +144,7 @@
    if all(size(At) == [size(blk,1), length(b)]); 
       convertyes = zeros(size(blk,1),1); 
       for p = 1:size(blk,1)
-         if strcmp(blk{p,1},'s') & all(size(At{p,1}) == sum(blk{p,2}))
+         if strcmp(blk{p,1},'s') && all(size(At{p,1}) == sum(blk{p,2}))
             convertyes(p) = 1;    
          end
       end
@@ -163,10 +163,10 @@
    tstart = cputime; 
    [blk,At,C,b,blkdim,numblk] = validate(blk,At,C,b,par);
    [blk,At,C,b,iscmp] = convertcmpsdp(blk,At,C,b);
-   if (iscmp) & (par.printlevel>=2)
+   if (iscmp) && (par.printlevel>=2)
       fprintf('\n SQLP has complex data'); 
    end 
-   if (nargin <= 5) | (isempty(X0) | isempty(y0) | isempty(Z0)); 
+   if (nargin <= 5) || (isempty(X0) || isempty(y0) || isempty(Z0)); 
       if (max([ops(At,'norm'),ops(C,'norm'),norm(b)]) > 1e2)
          [X0,y0,Z0] = infeaspt(blk,At,C,b,1);
       else
@@ -180,7 +180,7 @@
    end
    [X0,Z0] = validate_startpoint(blk,X0,Z0,par.spdensity); 
 %%
-   if (nargin <= 8) | (isempty(kap0) | isempty(tau0) | isempty(theta0)) 
+   if (nargin <= 8) || (isempty(kap0) || isempty(tau0) || isempty(theta0)) 
       if (max([ops(At,'norm'),ops(C,'norm'),norm(b)]) > 1e6)
          kap0 = 10*blktrace(blk,X0,Z0); 
       else

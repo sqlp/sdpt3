@@ -97,7 +97,7 @@
   function [X,Z] = unperm(blk,permZ,X,Z);
 %%
   for p = 1:size(blk,1)
-     if (strcmp(blk{p,1},'s') & ~isempty(permZ{p}))
+     if (strcmp(blk{p,1},'s') && ~isempty(permZ{p}))
         per = permZ{p};
         X{p} = X{p}(per,per);
         Z{p} = Z{p}(per,per);

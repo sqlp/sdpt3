@@ -12,7 +12,7 @@
     global solve_ok
 
     dX = cell(size(blk,1),1); dZ = cell(size(blk,1),1); dy = [];
-    if (any(isnan(xx)) | any(isinf(xx)))
+    if (any(isnan(xx)) || any(isinf(xx)))
        solve_ok = 0;
        fprintf('\n  HSDNTdirfun: solution contains NaN or inf.');
        return;

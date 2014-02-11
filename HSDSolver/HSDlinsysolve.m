@@ -34,17 +34,17 @@
     pertdiag = alpha*max(1e-8,diagschur); %% Note: alpha is close to 1e-15.
     mexschurfun(schur,pertdiag); 
     %%if (printlevel); fprintf(' %3.1e ',alpha); end
-    if (par.depconstr) | (min(diagschur) < min([1e-20*max(diagschur), 1e-4])) 
+    if (par.depconstr) || (min(diagschur) < min([1e-20*max(diagschur), 1e-4])) 
        lambda = 0.1*min(1e-14,const*norm(par.rp)/(1+norm(par.diagAAt.*par.dy2)));
        mexschurfun(schur,lambda*par.diagAAt);  
        %%if (printlevel); fprintf('*'); end
     end
-    if (max(diagschur)/min(diagschur) > 1e14) & (par.blkdim(2) == 0) ...
-       & (iter > 10)
+    if (max(diagschur)/min(diagschur) > 1e14) && (par.blkdim(2) == 0) ...
+       && (iter > 10)
        tol = 1e-6; 
        idx = find(diagschur < tol); len = length(idx);
        pertdiagschur = zeros(m,1);  
-       if (len > 0 & len < 5) & (norm(rhs(idx)) < tol) 
+       if (len > 0 && len < 5) && (norm(rhs(idx)) < tol) 
           pertdiagschur(idx) = 1*ones(length(idx),1); 
           mexschurfun(schur,pertdiagschur); 
           if (printlevel); fprintf('#'); end
@@ -87,7 +87,7 @@
        nnzmat = mexnnz(coeff.mat11);
        nnzmatdiff = (nnzmat ~= nnzmatold);     
        solve_ok = 1;  solvesys = 1;    
-       if (nnzmat > spdensity*m^2) | (m < 500) 
+       if (nnzmat > spdensity*m^2) || (m < 500) 
           matfct_options = 'chol';
        else
           matfct_options = 'spchol'; 
@@ -121,7 +121,7 @@
              tol = 1e-16;
              condest = max(abs(diag(L.Mu)))/min(abs(diag(L.Mu))); 
              idx = find(abs(diag(L.Mu)) < tol);
-             if ~isempty(idx) | (condest > 1e50*sqrt(norm(par.diagAAt))); %% old: 1e30 
+             if ~isempty(idx) || (condest > 1e50*sqrt(norm(par.diagAAt))); %% old: 1e30 
                 solvesys = 0; solve_ok = -4; 
                 use_LU = 1; 
                 msg = 'SMW too ill-conditioned, switch to LU factor'; 
@@ -130,14 +130,14 @@
           end
           if (solvesys)
              [xx,resnrm,solve_ok] = HSDbicgstab(coeff,rhs,L,[],[],printlevel);
-             if (solve_ok<=0) & (printlevel)
+             if (solve_ok<=0) && (printlevel)
                 fprintf('\n  warning: HSDbicgstab fails: %3.1f.',solve_ok); 
              end
           end
        end
        if (solve_ok < 0) 
-          if (m < 6000 & strcmp(matfct_options,'chol')) | ...
-             (m < 1e5 & strcmp(matfct_options,'spchol')) 
+          if (m < 6000 && strcmp(matfct_options,'chol')) || ...
+             (m < 1e5 && strcmp(matfct_options,'spchol')) 
              use_LU = 1;
              if (printlevel); fprintf('\n  switch to LU factor'); end
           end
@@ -155,7 +155,7 @@
        else
           raugmat = coeff.mat11; 
        end
-       if (nnzmat > spdensity*m^2) | (m+ncolU < 500) 
+       if (nnzmat > spdensity*m^2) || (m+ncolU < 500) 
           matfct_options = 'lu'; 
        else
           matfct_options = 'splu'; 
@@ -184,7 +184,7 @@
           L.Lt = L.L'; 
        end
        [xx,resnrm,solve_ok] = HSDbicgstab(coeff,rhs,L,[],[],printlevel);
-       if (solve_ok<=0) & (printlevel)
+       if (solve_ok<=0) && (printlevel)
           fprintf('\n  warning: HSDbicgstab fails: %3.1f,',solve_ok); 
        end
     end

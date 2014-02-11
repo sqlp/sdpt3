@@ -12,7 +12,7 @@
 %% Last Modified: 16 Sep 2004
 %%********************************************************************
 
-   function [At,C,b,normA,normC,normb,X0,y0,Z0] = scaling(blk,At,C,b,X0,y0,Z0); 
+   function [At,C,b,normA,normC,normb,X0,y0,Z0] = scaling(blk,At,C,b,X0,y0,Z0) 
 
    m = length(b); 
    numblk = size(blk,1);  
@@ -32,7 +32,7 @@
             m2 = m-m1; 
             ss = [0,cumsum(pblk{3})]; 
             for k=1:m2
-               idx = [ss(k)+1:ss(k+1)]; 
+               idx = ss(k)+1:ss(k+1); 
                V = At{p,2}(:,idx); 
                ii = dd(idx,1)-ss(k); %% undo cumulative indexing
                jj = dd(idx,2)-ss(k); 

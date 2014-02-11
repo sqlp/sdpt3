@@ -29,21 +29,21 @@
        end
        Cpert = min(Cpert,Cpertold); 
        if (prim_infeas < min([0.1*dual_infeas, 1e-7*runhist.pinfeas(1)])) ...
-      	  & (iter > 1 & dual_infeas > 0.8*runhist.dinfeas(iter-1) & relgap < 1e-4)
+      	  && (iter > 1 && dual_infeas > 0.8*runhist.dinfeas(iter-1) && relgap < 1e-4)
           Cpert(p) = 0.5*Cpert(p);        
        elseif (dual_infeas < min([0.1*prim_infeas, 1e-7*runhist.dinfeas(1)])) ...
-          & (iter > 1 & prim_infeas > 0.8*runhist.pinfeas(iter-1) & relgap < 1e-4)
+          && (iter > 1 && prim_infeas > 0.8*runhist.pinfeas(iter-1) && relgap < 1e-4)
           Cpert(p) = 0.5*Cpert(p);       
-       elseif (max(relgap,1e-2*infeas) < 1e-6 & relgap < 0.1*infeas) 
+       elseif (max(relgap,1e-2*infeas) < 1e-6 && relgap < 0.1*infeas) 
           Cpert(p) = 0.5*Cpert(p);
        end
-       if (prim_infeas < min([1e-4*dual_infeas,1e-7]) & theta < 1e-6) ...
-	  | (prim_infeas < 1e-4 & theta < 1e-10) 
+       if (prim_infeas < min([1e-4*dual_infeas,1e-7]) && theta < 1e-6) ...
+	  || (prim_infeas < 1e-4 && theta < 1e-10) 
           Cpert(p) = 0.1*Cpert(p);  
-       elseif (dual_infeas < min([1e-4*prim_infeas,1e-7]) & theta < 1e-6) ...
-	  | (dual_infeas < 1e-4 & theta < 1e-10) 
+       elseif (dual_infeas < min([1e-4*prim_infeas,1e-7]) && theta < 1e-6) ...
+	  || (dual_infeas < 1e-4 && theta < 1e-10) 
           Cpert(p) = 0.1*Cpert(p);         
-       elseif (iter > 1 & theta > 0.9*runhist.theta(iter-1) & infeas < 1e-3)
+       elseif (iter > 1 && theta > 0.9*runhist.theta(iter-1) && infeas < 1e-3)
           Cpert(p) = 0.1*Cpert(p); 
        end
        if strcmp(pblk{1},'s')

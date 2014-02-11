@@ -143,7 +143,7 @@
    normC = 1+max(normC); 
    nn = ops(C,'getM'); 
    m = length(b); 
-   if (nargin <= 8) | (isempty(kap0) | isempty(tau0) | isempty(theta0)) 
+   if (nargin <= 8) || (isempty(kap0) || isempty(tau0) || isempty(theta0)) 
       if (max([ops(At,'norm'),ops(C,'norm'),norm(b)]) > 1e6)
          kap0 = 10*blktrace(blk,X,Z); 
       else
@@ -249,9 +249,9 @@
          fprintf('     mean(obj)    cputime    kap   tau    theta\n');
          fprintf('------------------------------------------------');
          fprintf('--------------------------------------------\n');
-         fprintf('%2.0f|%4.3f|%4.3f|%2.1e|%2.1e|',0,0,0,prim_infeas,dual_infeas);
-         fprintf('%2.1e|%- 7.6e| %s:%s:%s|',gap,mean(obj),hh,mm,ss);
-         fprintf('%2.1e|%2.1e|%2.1e|',kap,tau,theta); 
+         fprintf('%2.0f||%4.3f||%4.3f||%2.1e||%2.1e||',0,0,0,prim_infeas,dual_infeas);
+         fprintf('%2.1e||%- 7.6e|| %s:%s:%s||',gap,mean(obj),hh,mm,ss);
+         fprintf('%2.1e||%2.1e||%2.1e||',kap,tau,theta); 
       end
    end
 %%
@@ -314,7 +314,7 @@
           [At,Cpert] = HSDsqlpCpert(blk,At,par,C,X,Cpert,runhist); 
           maxCpert(iter) = max(Cpert); 
           %%fprintf(' %2.1e',max(Cpert)); 
-          if (iter > 10 & norm(diff(maxCpert([iter-3,iter]))) < 1e-13)
+          if (iter > 10 && norm(diff(maxCpert([iter-3,iter]))) < 1e-13)
              Cpert = 0.5*Cpert; 
              maxCpert(iter) = max(Cpert); 
           end
@@ -383,7 +383,7 @@
 %%  stopping criteria for predictor step.
 %%-----------------------------------------
 %%
-      if (min(pstep,dstep) < steptol) & (stoplevel)
+      if (min(pstep,dstep) < steptol) && (stoplevel)
          msg = 'stop: steps in predictor too short';
          if (printlevel) 
             fprintf('\n  %s',msg);
@@ -401,7 +401,7 @@
          pred_slow = pred_slow + (mupred/mu > 5*pred_convg_rate);
       end 
       if (~predcorr)
-         if (max(mu,infeas) < 1e-6) & (pred_slow) & (stoplevel)
+         if (max(mu,infeas) < 1e-6) && (pred_slow) && (stoplevel)
             msg = 'stop: lack of progress in predictor'; 
             if (printlevel) 
                fprintf('\n  %s',msg);
@@ -420,7 +420,7 @@
 %% corrector step.
 %%---------------------------------------------------------------
 %%
-      if (predcorr) & (~breakyes)
+      if (predcorr) && (~breakyes)
          step_pred = min(pstep,dstep);
          if (mu > 1e-6)
             if (step_pred < 1/sqrt(3)); 
@@ -487,8 +487,8 @@
             corr_convg_rate = mean(runhist.gap(idx)./runhist.gap(idx-1));
             corr_slow = corr_slow + (mucorr/mu > max(min(1,5*corr_convg_rate),0.8)); 
          end 
-	 if (max(mu,infeas) < 1e-6) & (iter > 10) & (stoplevel) ...
-            & (corr_slow & mucorr/mu > 1.0) 
+	 if (max(mu,infeas) < 1e-6) && (iter > 10) && (stoplevel) ...
+            && (corr_slow && mucorr/mu > 1.0) 
             msg = 'stop: lack of progress in corrector'; 
    	    if (printlevel) 
                fprintf('\n  %s',msg);
@@ -528,17 +528,17 @@
          prim_infeasnew = norm(b-AXtmp/tautmp)/normb;
          pinfeas_bad(1) = (prim_infeasnew > max([1e-8,relgap,10*infeas]));
          pinfeas_bad(2) = (prim_infeasnew > max([1e-4,20*prim_infeas]) ...
-			   & (infeas < 1e-2)); 
+			   && (infeas < 1e-2)); 
          pinfeas_bad(3) = (max([relgap,dual_infeas]) < 1e-4) ...
-	     & (prim_infeasnew > max([2*prim_infeas,10*dual_infeas,1e-7]));  
+	     && (prim_infeasnew > max([2*prim_infeas,10*dual_infeas,1e-7]));  
          if any(indef)
             msg = 'stop: X, Z not both positive definite';
             if (printlevel); fprintf('\n  %s',msg); end
    	    termcode = -3; 
             breakyes = 1;  
          elseif any(pinfeas_bad)
-            if (stoplevel) & (max(pstep,dstep)<=1) & (kap < 1e-3) ...
-    	       & (prim_infeasnew > dual_infeas); 
+            if (stoplevel) && (max(pstep,dstep)<=1) && (kap < 1e-3) ...
+    	       && (prim_infeasnew > dual_infeas); 
                msg = 'stop: primal infeas has deteriorated too much'; 
                if (printlevel); fprintf('\n  %s, %2.1e',msg,prim_infeasnew); 
 	          fprintf(' %2.1d,%2.1d,%2.1d',...
@@ -561,7 +561,7 @@
 %% perturb Z: do this step before checking for break
 %%--------------------------------------------------
       perturb_Z = 1;
-      if (~breakyes) & (perturb_Z)
+      if (~breakyes) && (perturb_Z)
          trXZtmp = blktrace(blk,X,Z);
          trXE  = blktrace(blk,X,EE);
          Zpert = max(1e-12,0.2*min(relgap,prim_infeas)).*normC./normE;
@@ -615,10 +615,10 @@
       ttime.misc = ttime.misc + etime(timenew,timeold); timeold = timenew; 
       [hh,mm,ss] = mytime(sum(runhist.cputime)); 
       if (printlevel>=3)
-         fprintf('\n%2.0f|%4.3f|%4.3f|',iter,pstep,dstep);
-         fprintf('%2.1e|%2.1e|%2.1e|',prim_infeas,dual_infeas,gap);
-         fprintf('%- 7.6e| %s:%s:%s|',mean(obj),hh,mm,ss);
-         fprintf('%2.1e|%2.1e|%2.1e|',kap,tau,theta); 
+         fprintf('\n%2.0f||%4.3f||%4.3f||',iter,pstep,dstep);
+         fprintf('%2.1e||%2.1e||%2.1e||',prim_infeas,dual_infeas,gap);
+         fprintf('%- 7.6e|| %s:%s:%s||',mean(obj),hh,mm,ss);
+         fprintf('%2.1e||%2.1e||%2.1e||',kap,tau,theta); 
       end
 %%
 %%--------------------------------------------------
@@ -659,8 +659,8 @@
 %% check for break
 %%--------------------------------------------------
       if ((prim_infeas < 1.5*prim_infeas_best) ...                
-         | (max(relgap,infeas) < 0.8*max(relgap_best,infeas_best))) ...
-         & (max(relgap,dual_infeas) < 0.8*max(relgap_best,dual_infeas_best)) 
+         || (max(relgap,infeas) < 0.8*max(relgap_best,infeas_best))) ...
+         && (max(relgap,dual_infeas) < 0.8*max(relgap_best,dual_infeas_best)) 
          Xbest = X; ybest = y; Zbest = Z; 
          kapbest = kap; taubest = tau; thetabest = theta; 
          prim_infeas_best = prim_infeas; 
@@ -672,14 +672,14 @@
          update_best(iter+1) = 0; 
       end
       errbest = max(relgap_best,infeas_best); 
-      if (errbest < 1e-4 & norm(update_best(max(1,iter-1):iter+1)) == 0)
+      if (errbest < 1e-4 && norm(update_best(max(1,iter-1):iter+1)) == 0)
          msg = 'lack of progess in infeas'; 
          if (printlevel); fprintf('\n  %s',msg); end
          termcode = -9; 
          breakyes = 1; 
       end  
-      if (errbest < 1e-3 & max([relgap,infeas]) > 1.2*errbest & theta < 1e-10) ...
-         & (kap < 1e-6)
+      if (errbest < 1e-3 && max([relgap,infeas]) > 1.2*errbest && theta < 1e-10) ...
+         && (kap < 1e-6)
          msg = 'lack of progress in infeas'; 
          if (printlevel); fprintf('\n  %s',msg); end
          termcode = -9; 
@@ -692,7 +692,7 @@
 %%---------------------------------------------------------------
 %%
    use_bestiter = 1; 
-   if (use_bestiter) & (param.termcode <= 0)
+   if (use_bestiter) && (param.termcode <= 0)
       X = Xbest; y = ybest; Z = Zbest; 
       kap = kapbest; tau = taubest; theta = thetabest; 
       trXZ = blktrace(blk,X,Z); 

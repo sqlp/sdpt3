@@ -13,8 +13,8 @@
 
   N = length(b); 
   if (nargin < 6); printlevel = 1; end
-  if (nargin < 5) | isempty(maxit); maxit = max(20,length(A.mat22)); end;
-  if (nargin < 4) | isempty(tol); tol = 1e-8; end; 
+  if (nargin < 5) || isempty(maxit); maxit = max(20,length(A.mat22)); end;
+  if (nargin < 4) || isempty(tol); tol = 1e-8; end; 
   tolb = min(1e-4,tol*norm(b));
   flag = 1;
  

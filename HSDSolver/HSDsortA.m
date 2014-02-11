@@ -25,7 +25,7 @@
       pblk = blk(p,:); 
       n = sum(pblk{2}); 
       numblk = length(pblk{2}); 
-      if strcmp(pblk{1},'s') & (max(pblk{2}) > smallblkdim)
+      if strcmp(pblk{1},'s') && (max(pblk{2}) > smallblkdim)
          n2 = sum(pblk{2}.*pblk{2});  n22 = sum(pblk{2}.*(pblk{2}+1))/2; 
          m1 = size(At{p,1},2);   
          if (length(pblk{2}) == 1)  
@@ -51,13 +51,13 @@
             else
                per = [];
             end 
-            if (length(pblk) > 2) & (~isempty(per)) 
+            if (length(pblk) > 2) && (~isempty(per)) 
                m2 = length(pblk{3}); 
                P = spconvert([(1:n)', per', ones(n,1)]);
                At{p,2} = P*At{p,2};
             end
          end
-         if ~isempty(At{p,1}) & (mexnnz(At{p,1}) < m*n22/2)
+         if ~isempty(At{p,1}) && (mexnnz(At{p,1}) < m*n22/2)
             for k = 1:m1
                Ak = At{p,1}(:,k); 
                nnzA(p,k) = length(find(abs(Ak) > eps)); 
@@ -67,7 +67,7 @@
             permA(p,1:m1) = permAp;
             invpermA(p,permAp) = [1:m1]; 
          end
-      elseif strcmp(pblk{1},'q') | strcmp(pblk{1},'l') | strcmp(pblk{1},'u'); 
+      elseif strcmp(pblk{1},'q') || strcmp(pblk{1},'l') || strcmp(pblk{1},'u'); 
          if ~issparse(At{p,1});
             At{p,1} = sparse(At{p,1}); 
          end

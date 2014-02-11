@@ -40,18 +40,17 @@
 %% Last Modified: 20 Dec 2007
 %%*************************************************************************
 
-  function [obj,X,y,Z,info,runhist] = sdpt3(blk,At,C,b,OPTIONS,X0,y0,Z0);
+  function [obj,X,y,Z,info,runhist] = sdpt3(blk,At,C,b,OPTIONS,X0,y0,Z0)
 
 %%                                      
 %%-----------------------------------------
 %% get parameters from the OPTIONS structure 
 %%-----------------------------------------
 %%
-   warning off; 
    if (nargin < 5); OPTIONS = []; end
    
    matlabversion = sscanf(version,'%f');
-   if strcmp(computer,'PCWIN64') | strcmp(computer,'GLNXA64')
+   if strcmp(computer,'PCWIN64') || strcmp(computer,'GLNXA64')
       par.computer = 64; 
    else
       par.computer = 32; 
@@ -78,15 +77,15 @@
    parbarrier  = cell(size(blk,1),1); 
    for p = 1:size(blk,1)
       pblk = blk(p,:); 
-      if strcmp(pblk{1},'s') | strcmp(pblk{1},'q')
+      if strcmp(pblk{1},'s') || strcmp(pblk{1},'q')
          parbarrier{p} = zeros(1,length(pblk{2}));
-      elseif strcmp(pblk{1},'l') | strcmp(pblk{1},'u' )
+      elseif strcmp(pblk{1},'l') || strcmp(pblk{1},'u' )
          parbarrier{p} = zeros(1,sum(pblk{2}));
       end
    end
    parbarrier_0 = parbarrier;   
 %%
-   if exist('OPTIONS')
+   if nargin > 4,
       if isfield(OPTIONS,'model')  
          model = OPTIONS.model; 
          if all(model-[0,1,2]); error(' model must be 0, 1 or 2'); end
@@ -132,7 +131,7 @@
 %%-----------------------------------------
 %%
     isemptyAtb = 0; 
-    if isempty(At) & isempty(b);
+    if isempty(At) && isempty(b);
        %% Add redundant constraint: <-I,X> <= 0
        b = 0; 
        At = ops(ops(blk,'identity'),'*',-1);  
@@ -152,7 +151,7 @@
    if all(size(At) == [size(blk,1), length(b)]); 
       convertyes = zeros(size(blk,1),1); 
       for p = 1:size(blk,1)
-         if strcmp(blk{p,1},'s') & all(size(At{p,1}) == sum(blk{p,2}))
+         if strcmp(blk{p,1},'s') && all(size(At{p,1}) == sum(blk{p,2}))
             convertyes(p) = 1;    
          end
       end
@@ -168,16 +167,15 @@
 %% validate SQLP data 
 %%-----------------------------------------
 %%
-   tstart = cputime; 
+   % tstart = cputime; 
    [blk,At,C,b,blkdim,numblk,parbarrier] = validate(blk,At,C,b,par,parbarrier);
    [blk,At,C,b,iscmp] = convertcmpsdp(blk,At,C,b);
-   if (iscmp) & (par.printlevel>=2); 
+   if (iscmp) && (par.printlevel>=2); 
       fprintf('\n SQLP has complex data'); 
    end
    exist_analytic_term = 0; 
    for p = 1:size(blk,1);
-      idx = find(parbarrier{p} > 0); 
-      if ~isempty(idx); exist_analytic_term = 1; end
+      if any(parbarrier{p} > 0), exist_analytic_term = 1; end
    end
    if (par.printlevel>=2)
       fprintf('\n num. of constraints = %2.0d',length(b));      
@@ -197,7 +195,7 @@
 %% initial iterate
 %%-----------------------------------------
 %%
-   if (nargin <= 5) | (isempty(X0) | isempty(y0) | isempty(Z0)); 
+   if (nargin <= 5) || (isempty(X0) || isempty(y0) || isempty(Z0)); 
       par.startpoint = 1; 
       [X0,y0,Z0] = infeaspt(blk,At,C,b); 
    else
@@ -253,7 +251,7 @@
 %%-----------------------------------------
 %%
    if (par.vers == 0); 
-      if blkdim(1); par.vers = 1; else; par.vers = 2; end
+      if blkdim(1); par.vers = 1; else par.vers = 2; end
    end
    par.blkdim   = blkdim;
    par.ublksize = ublksize;
@@ -261,18 +259,18 @@
       model = 1; 
    else
       if (model == 0)
-         if (ublksize > 0); model = 2; else; model = 1; end
+         if (ublksize > 0); model = 2; else model = 1; end
       end
    end
    if (model==1)
       [obj,X3,y,Z3,info,runhist] = ...
       sqlpmain(blk3,At3,C3,b,par,parbarrier3,X03,y0,Z03);
    elseif (model==2)
-      if (nargin <= 5) | (isempty(X0) | isempty(y0) | isempty(Z0)); 
+      if (nargin <= 5) || (isempty(X0) || isempty(y0) || isempty(Z0)); 
          if (max([ops(At3,'norm'),ops(C3,'norm'),norm(b)]) > 1e2)
-            [X03,y03,Z03] = infeaspt(blk3,At3,C3,b,1);
+            [X03,y03,Z03] = infeaspt(blk3,At3,C3,b,1); %#ok
          else
-            [X03,y03,Z03] = infeaspt(blk3,At3,C3,b,2,1);
+            [X03,y03,Z03] = infeaspt(blk3,At3,C3,b,2,1); %#ok
          end
       end
       [obj,X3,y,Z3,info,runhist] = ...
@@ -295,13 +293,13 @@
          idxnondiag = diagblkinfo{p,3}; 
          if ~isempty(idxdiag)
             len = length(idxdiag); 
-            Xtmp = [idxdiag,idxdiag,X3{end}(count+[1:len]); n, n, 0];
-            Ztmp = [idxdiag,idxdiag,Z3{end}(count+[1:len]); n, n, 0];
+            Xtmp = [idxdiag,idxdiag,X3{end}(count+1:count+len); n, n, 0];
+            Ztmp = [idxdiag,idxdiag,Z3{end}(count+1:count+len); n, n, 0];
             if ~isempty(idxnondiag)
                [ii,jj,vv] = find(X3{blkno});
-               Xtmp = [Xtmp; idxnondiag(ii),idxnondiag(jj),vv];
+               Xtmp = [Xtmp; idxnondiag(ii),idxnondiag(jj),vv]; %#ok
                [ii,jj,vv] = find(Z3{blkno}); 
-               Ztmp = [Ztmp; idxnondiag(ii),idxnondiag(jj),vv];
+               Ztmp = [Ztmp; idxnondiag(ii),idxnondiag(jj),vv]; %#ok
             end
             X2{p} = spconvert(Xtmp); 
             Z2{p} = spconvert(Ztmp); 
@@ -349,8 +347,8 @@
          pblk = blk(p,:); 
          n = sum(pblk{2})/2;
          if strcmp(pblk{1},'s'); 
-            X{p} = X{p}(1:n,1:n) + sqrt(-1)*X{p}(n+[1:n],1:n); 
-            Z{p} = Z{p}(1:n,1:n) + sqrt(-1)*Z{p}(n+[1:n],1:n); 
+            X{p} = X{p}(1:n,1:n) + sqrt(-1)*X{p}(n+1:2*n,1:n); 
+            Z{p} = Z{p}(1:n,1:n) + sqrt(-1)*Z{p}(n+1:2*n,1:n); 
             X{p} = 0.5*(X{p}+X{p}');  
             Z{p} = 0.5*(Z{p}+Z{p}');  
          end
