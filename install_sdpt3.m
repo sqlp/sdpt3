@@ -45,13 +45,13 @@ if ~need_rebuild,
             mdir = 'o_win32';
         elseif ismac,
             mdir = 'o_mac32';
-        elseif isunix && any( strfind( computer, 'linux' ) ),
+        elseif isunix && any( strfind( COMPUTER, 'linux' ) ),
             mdir = 'o_lin32';
         end
         if ~isempty(mdir) && strncmpi( COMPUTER, 'x86_64', 6 ),
             mdir(end-1:end) = '64';
         end
-        if ~exist( [ mpath, fs, mdir ], 'dir' ),
+        if ~exist( [ mbase, fs, mdir ], 'dir' ),
             mdir = '';
         end
     end
