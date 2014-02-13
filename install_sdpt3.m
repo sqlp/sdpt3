@@ -16,7 +16,10 @@ targets64={...
 fs = filesep;
 mpath = mfilename('fullpath');
 mpath = mpath( 1 : max([1,strfind(mpath,fs)]) - 1 );
+mbase = [ mpath, fs, 'Solver', fs, 'Mexfun' ];
+mdir = '';
 ISOCTAVE = exist('OCTAVE_VERSION','builtin');
+VERSION = [1,0.01]*sscanf(version,'%d.%d');
 if ISOCTAVE, prog = 'Octave'; else prog = 'Matlab'; end
 COMPUTER = computer;
 mext = mexext;
@@ -37,9 +40,7 @@ fprintf( '\n%s\nSDPT3 installation script\n   Directory: %s\n   %s %s on %s\n%s\
 
 if ~need_rebuild,
     fprintf( 'Looking for existing binaries...' );
-    mbase = [ mpath, fs, 'Solver', fs, 'Mexfun' ];
-    mdir = '';
-    if ISOCTAVE,
+    if ISOCTAVE && VERSION > 3.08,
         if ispc,
             mdir = 'o_win32';
         elseif ismac,
@@ -89,8 +90,6 @@ if need_rebuild,
     disp( 'Attempting to recompile the SDPT3 binaries:' );
     % Note the use of 0.01 here. That's because version 7 had more than 10
     % minor releases, so 7.10-7.14 need to be ordered after 7.01-7.09.
-    VERSION = [1,0.01]*sscanf(version,'%d.%d');
-    IS64BIT = ~ISOCTAVE & strcmp(COMPUTER(end-1:end),'64');
     if ispc,
         flags = {'-DPC'};
     elseif isunix,
@@ -107,7 +106,7 @@ if need_rebuild,
         libs{end+1} = '-lblas';
     else
         flags{end+1} = '-O';
-        if IS64BIT && ( VERSION >= 7.03 ),
+        if strcmp(COMPUTER(end-1:end),'64') && ( VERSION >= 7.03 ),
             flags{end+1} = '-largeArrayDims';
         elseif VERSION < 7.03,
             flags{end+1} = '-DmwIndex=int';
@@ -146,7 +145,7 @@ if need_rebuild,
     for i=1:length(targets64),
         targ = targets64{i};
         mfile = [ targ(1:min(strfind(targ,'.'))), mext ];
-        temp = [ 'mex ', flags, ' ', targets64{i}, '.cc ', libs ];
+        temp = [ 'mex ', flags, ' ', targets64{i}, '.c ', libs ];
         fprintf( '   %s: %s\n', mfile, targ );
         eval( temp, 'failed=true;' ); %#ok
     end

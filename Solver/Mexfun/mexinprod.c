@@ -13,11 +13,6 @@
 #include <mex.h>
 #include <math.h>
 
-#if !defined(MX_API_VER) || ( MX_API_VER < 0x07030000 )
-typedef int mwIndex;
-typedef int mwSize;
-#endif
-
 /**********************************************************
 * realdot1: x dense, y dense 
 **********************************************************/
