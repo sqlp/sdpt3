@@ -258,8 +258,8 @@ if (printlevel >= 2)
         fprintf('      prim-obj      dual-obj    cputime\n');
         fprintf('------------------------------------------------');
         fprintf('-------------------\n');
-        fprintf('%2.0f||%4.3f||%4.3f||%2.1e||%2.1e||',0,0,0,prim_infeas,dual_infeas);
-        fprintf('%2.1e||%- 7.6e %- 7.6e|| %s:%s:%s||',gap,obj(1),obj(2),hh,mm,ss);
+        fprintf('%2.0f|%4.3f|%4.3f|%2.1e|%2.1e|',0,0,0,prim_infeas,dual_infeas);
+        fprintf('%2.1e|%- 7.6e %- 7.6e| %s:%s:%s|',gap,obj(1),obj(2),hh,mm,ss);
     end
 end
 %%
@@ -318,7 +318,7 @@ for iter = 1:maxit;
             Cpert = Cpert*0.1;
         end
         Rd = ops(Rd,'+',EE,Cpert);
-        %%if (printlevel > 2); fprintf('||%2.1e',Cpert); end
+        %%if (printlevel > 2); fprintf('|%2.1e',Cpert); end
     end
     %%---------------------------------------------------------------
     %% predictor step.
@@ -659,9 +659,9 @@ for iter = 1:maxit;
     ttime.misc = ttime.misc + etime(timenew,timeold); % timeold = timenew;
     [hh,mm,ss] = mytime(sum(runhist.cputime));
     if (printlevel>=3)
-        fprintf('\n%2.0f||%4.3f||%4.3f',iter,pstep,dstep);
-        fprintf('||%2.1e||%2.1e||%2.1e||',prim_infeas,dual_infeas,gap);
-        fprintf('%- 7.6e %- 7.6e|| %s:%s:%s||',obj(1),obj(2),hh,mm,ss);
+        fprintf('\n%2.0f|%4.3f|%4.3f',iter,pstep,dstep);
+        fprintf('|%2.1e|%2.1e|%2.1e|',prim_infeas,dual_infeas,gap);
+        fprintf('%- 7.6e %- 7.6e| %s:%s:%s|',obj(1),obj(2),hh,mm,ss);
     end
     %%--------------------------------------------------
     %% check convergence

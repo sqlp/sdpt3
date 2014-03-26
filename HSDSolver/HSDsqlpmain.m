@@ -249,9 +249,9 @@ if (printlevel >= 2)
         fprintf('     mean(obj)    cputime    kap   tau    theta\n');
         fprintf('------------------------------------------------');
         fprintf('--------------------------------------------\n');
-        fprintf('%2.0f||%4.3f||%4.3f||%2.1e||%2.1e||',0,0,0,prim_infeas,dual_infeas);
-        fprintf('%2.1e||%- 7.6e|| %s:%s:%s||',gap,mean(obj),hh,mm,ss);
-        fprintf('%2.1e||%2.1e||%2.1e||',kap,tau,theta);
+        fprintf('%2.0f|%4.3f|%4.3f|%2.1e|%2.1e|',0,0,0,prim_infeas,dual_infeas);
+        fprintf('%2.1e|%- 7.6e| %s:%s:%s|',gap,mean(obj),hh,mm,ss);
+        fprintf('%2.1e|%2.1e|%2.1e|',kap,tau,theta);
     end
 end
 %%
@@ -615,10 +615,10 @@ for iter = 1:maxit;
     ttime.misc = ttime.misc + etime(timenew,timeold); % timeold = timenew;
     [hh,mm,ss] = mytime(sum(runhist.cputime));
     if (printlevel>=3)
-        fprintf('\n%2.0f||%4.3f||%4.3f||',iter,pstep,dstep);
-        fprintf('%2.1e||%2.1e||%2.1e||',prim_infeas,dual_infeas,gap);
-        fprintf('%- 7.6e|| %s:%s:%s||',mean(obj),hh,mm,ss);
-        fprintf('%2.1e||%2.1e||%2.1e||',kap,tau,theta);
+        fprintf('\n%2.0f|%4.3f|%4.3f|',iter,pstep,dstep);
+        fprintf('%2.1e|%2.1e|%2.1e|',prim_infeas,dual_infeas,gap);
+        fprintf('%- 7.6e| %s:%s:%s|',mean(obj),hh,mm,ss);
+        fprintf('%2.1e|%2.1e|%2.1e|',kap,tau,theta);
     end
     %%
     %%--------------------------------------------------
