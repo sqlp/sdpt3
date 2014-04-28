@@ -15,6 +15,8 @@ global solve_ok  use_LU  exist_analytic_term numpertdiagschur
 global schurfun  schurfun_par
 %%
 % matlabversion = par.matlabversion;
+w1 = warning('off','MATLAB:nearlySingularMatrix');
+w2 = warning('off','MATLAB:singularMatrix');
 vers          = par.vers;
 predcorr      = par.predcorr;
 gam           = par.gam;
@@ -815,4 +817,6 @@ info.msg1     = msg;
 info.msg2     = msg2;
 info.msg3     = msg3;
 sqlpsummary(info,ttime,infeas_org,printlevel);
+warning(w2.state,w2.identifier);
+warning(w1.state,w1.identifier);
 %%*****************************************************************************
