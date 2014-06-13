@@ -38,7 +38,7 @@ if (termcode <= 0)
         fprintf(' gap := trace(XZ)       = %3.2e\n',gap);
         fprintf(' relative gap           = %3.2e\n',relgap);
         fprintf(' actual relative gap    = %3.2e\n',-diff(obj)/(1+sum(abs(obj))));
-        if norm(infeas_org)
+        if ~isempty(infeas_org)
             fprintf(' rel. primal infeas (scaled problem)   = %3.2e\n',prim_infeas);
             fprintf(' rel. dual     "        "       "      = %3.2e\n',dual_infeas);
             fprintf(' rel. primal infeas (unscaled problem) = %3.2e\n',infeas_org(1));
