@@ -109,7 +109,7 @@ else
     x1 = full(x);
 end
 if (m2 > 0)
-    x2 = x(m+1:m+m2w);
+    x2 = x(m+1:m+m2);
     w = linsysolvefun(L,x1);
     z = mexMatvec(A.mat12,w,1) -x2;
     z = L.Mu \ (L.Ml \ (L.Mp*z));
