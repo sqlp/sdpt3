@@ -39,7 +39,7 @@ for p=1:size(blk,1)
             numdiagelt = numdiagelt + length(idxdiag);
             idxnondiag = setdiff((1:n)',idxdiag);
             diagblkinfo{p,2} = idxdiag;
-            diagblkinfo{p,3} = idxnondiag;
+            diagblkinfo{p,3} = idxnondiag(:);
             if ~isempty(idxnondiag)
                 numblknew = numblknew + 1;
                 diagblkinfo{p,1} = numblknew;
