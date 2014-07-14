@@ -64,7 +64,7 @@ clear linefeeds;
 %%
 %% Close the file
 %%
-fclose('all');
+fclose(fid);
 if compressed==1; unix(['compress ',fname]); end;
 if compressed==2; unix(['gzip ',fname]); end;
 %%
