@@ -206,10 +206,7 @@ infeas = max(prim_infeas,dual_infeas);
 %%
 termcode = 0;
 pstep = 1; dstep = 1; pred_convg_rate = 1; corr_convg_rate = 1;
-prim_infeas_best = prim_infeas;
-dual_infeas_best = dual_infeas;
-infeas_best = infeas;
-relgap_best = relgap;
+besttol = max( relgap, infeas );
 % homRd = inf; homrp = inf; dy = zeros(length(b),1);
 msg = []; msg2 = [];
 runhist.pobj    = obj(1);
@@ -658,28 +655,19 @@ for iter = 1:maxit;
     %%--------------------------------------------------
     %% check for break
     %%--------------------------------------------------
-    if ((prim_infeas < 1.5*prim_infeas_best) ...
-            || (max(relgap,infeas) < 0.8*max(relgap_best,infeas_best))) ...
-            && (max(relgap,dual_infeas) < 0.8*max(relgap_best,dual_infeas_best))
+    newtol = max(relgap,infeas);
+    update_best(iter+1) = ~( newtol >= besttol ); %#ok
+    if update_best(iter+1),
         Xbest = X; ybest = y; Zbest = Z;
-        % kapbest = kap; taubest = tau; thetabest = theta;
-        prim_infeas_best = prim_infeas;
-        dual_infeas_best = dual_infeas;
-        relgap_best = relgap; infeas_best = infeas;
-        update_best(iter+1) = 1; %#ok
-        %%fprintf('#')
-    else
-        update_best(iter+1) = 0; %#ok
+        besttol = newtol;
     end
-    errbest = max(relgap_best,infeas_best);
-    if (errbest < 1e-4 && norm(update_best(max(1,iter-1):iter+1)) == 0)
+    if besttol < 1e-4 && ~any(update_best(max(1,iter-1):iter+1))
         msg = 'lack of progess in infeas';
         if (printlevel); fprintf('\n  %s',msg); end
         termcode = -9;
         breakyes = 1;
     end
-    if (errbest < 1e-3 && max([relgap,infeas]) > 1.2*errbest && theta < 1e-10) ...
-            && (kap < 1e-6)
+    if besttol < 1e-3 && newtol > 1.2*besttol && theta < 1e-10 && kap < 1e-6
         msg = 'lack of progress in infeas';
         if (printlevel); fprintf('\n  %s',msg); end
         termcode = -9;

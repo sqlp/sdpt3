@@ -21,8 +21,7 @@ vers          = par.vers;
 predcorr      = par.predcorr;
 gam           = par.gam;
 expon         = par.expon;
-gaptol        = par.gaptol;
-inftol        = par.inftol;
+gaptol        = par.gaptol + ( par.gaptol == 0 );
 steptol       = par.steptol;
 maxit         = par.maxit;
 printlevel    = par.printlevel;
@@ -215,12 +214,7 @@ normX = ops(X,'norm');
 %%
 termcode = 0; restart = 0;
 pstep = 1; dstep = 1; pred_convg_rate = 1; corr_convg_rate = 1;
-% prim_infeas_min  = prim_infeas;
-% dual_infeas_min  = dual_infeas;
-prim_infeas_best = prim_infeas;
-dual_infeas_best = dual_infeas;
-infeas_best = infeas;
-relgap_best = relgap;
+besttol = max( relgap, infeas );
 homRd = inf; homrp = inf; dy = zeros(length(b),1);
 msg = []; msg2 = []; msg3 = [];
 runhist.pobj    = obj(1);
@@ -284,8 +278,8 @@ param.prim_infeas_bad = 0;
 param.dual_infeas_bad = 0;
 param.prim_infeas_min = prim_infeas;
 param.dual_infeas_min = dual_infeas;
-param.gaptol      = gaptol;
-param.inftol      = inftol;
+param.gaptol      = par.gaptol;
+param.inftol      = par.inftol;
 param.maxit       = maxit;
 param.scale_data  = scale_data;
 param.printlevel  = printlevel;
@@ -705,21 +699,14 @@ for iter = 1:maxit;
     end
     %%--------------------------------------------------
     %% check for break
-    %%--------------------------------------------------
-    if ((prim_infeas < 1.5*prim_infeas_best) ...
-            || (max(relgap,infeas) < 0.8*max(relgap_best,infeas_best))) ...
-            && (max(relgap,dual_infeas) < 0.8*max(relgap_best,dual_infeas_best))
+    %%--------------------------------------------------    
+    newtol = max(relgap,infeas);
+    update_best(iter+1) = ~( newtol >= besttol ); %#ok
+    if update_best(iter+1),
         Xbest = X; ybest = y; Zbest = Z;
-        prim_infeas_best = prim_infeas;
-        dual_infeas_best = dual_infeas;
-        relgap_best = relgap; infeas_best = infeas;
-        update_best(iter+1) = 1; %#ok
-        %%fprintf('#')
-    else
-        update_best(iter+1) = 0; %#ok
+        besttol = newtol;
     end
-    if (max(relgap_best,infeas_best) < 1e-4 ...
-            && norm(update_best(max(1,iter-1):iter+1)) == 0)
+    if besttol < 1e-4 && ~any(update_best(max(1,iter-1):iter+1))
         msg = 'lack of progress in infeas';
         if (printlevel); fprintf('\n  %s',msg); end
         termcode = -9;
