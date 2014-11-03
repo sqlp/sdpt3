@@ -59,6 +59,8 @@ randstate = rand('state');  randnstate = randn('state'); %#ok
 rand('state',0);  randn('state',0); %#ok
 %%
 % matlabversion = par.matlabversion;
+w1 = warning('off','MATLAB:nearlySingularMatrix');
+w2 = warning('off','MATLAB:singularMatrix');
 vers          = par.vers;
 predcorr      = par.predcorr;
 gam           = par.gam;
@@ -758,6 +760,8 @@ info.normC    = ops(C,'norm');
 info.msg1     = msg;
 info.msg2     = msg2;
 %%
+warning(w2.state,w2.identifier);
+warning(w1.state,w1.identifier);
 sqlpsummary(info,ttime,[],printlevel);
 rand('state',randstate); %#ok
 randn('state',randnstate); %#ok
