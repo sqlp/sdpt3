@@ -54,13 +54,14 @@ function [obj,X,y,Z,info,runhist] = ...
 %%
 global spdensity  smallblkdim  solve_ok use_LU
 global schurfun   schurfun_par
-%%
-randstate = rand('state');  randnstate = randn('state'); %#ok
-rand('state',0);  randn('state',0); %#ok
-%%
 % matlabversion = par.matlabversion;
-w1 = warning('off','MATLAB:nearlySingularMatrix');
-w2 = warning('off','MATLAB:singularMatrix');
+isoctave = exist( 'OCTAVE_VERSION', 'builtin' );
+if isoctave,
+  w1 = warning('off','Octave:nearly-singular-matrix');
+else
+  w1 = warning('off','MATLAB:nearlySingularMatrix');
+  w2 = warning('off','MATLAB:singularMatrix');
+end
 vers          = par.vers;
 predcorr      = par.predcorr;
 gam           = par.gam;
@@ -119,8 +120,8 @@ for p = 1:size(blk,1)
         C{p}  = [C{p}; -C{p}];
         At{p} = [At{p}; -At{p}];
         Cnew{p} = C{p} + Cpert(p)*ones(n,1);
-        X{p}  = 1+rand(n,1); %% do not add a factor of n
-        Z{p}  = 1+rand(n,1); %%
+        X{p}  = 1+randmat(n,1,0,'u'); 
+        Z{p}  = 1+randmat(n,1,0,'u');
     end
 end
 %%
@@ -760,9 +761,11 @@ info.normC    = ops(C,'norm');
 info.msg1     = msg;
 info.msg2     = msg2;
 %%
-warning(w2.state,w2.identifier);
-warning(w1.state,w1.identifier);
+if isoctave,
+  warning(w1.state,w1.identifier);
+else
+  warning(w2.state,w2.identifier);
+  warning(w1.state,w1.identifier);
+end
 sqlpsummary(info,ttime,[],printlevel);
-rand('state',randstate); %#ok
-randn('state',randnstate); %#ok
 %%*****************************************************************************

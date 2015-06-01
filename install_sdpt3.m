@@ -40,20 +40,15 @@ fprintf( '\n%s\nSDPT3 installation script\n   Directory: %s\n   %s %s on %s\n%s\
 
 if ~need_rebuild,
     fprintf( 'Looking for existing binaries...' );
-    if ISOCTAVE && VERSION > 3.08,
-        if ispc,
-            mdir = 'o_win32';
-        elseif ismac,
-            mdir = 'o_mac32';
-        elseif isunix && any( strfind( COMPUTER, 'linux' ) ),
-            mdir = 'o_lin32';
+    mdir = '';
+    if ISOCTAVE && VERSION >= 4,
+        switch computer,
+        case 'i686-w64-mingw32',
+            mdir = 'o_win';
         end
-        if ~isempty(mdir) && strncmpi( COMPUTER, 'x86_64', 6 ),
-            mdir(end-1:end) = '64';
-        end
-        if ~exist( [ mbase, fs, mdir ], 'dir' ),
-            mdir = '';
-        end
+    end
+    if ~isempty(mdir) && ~exist( [ mbase, fs, mdir ], 'dir' ),
+        mdir = '';
     end
     nfound = [ 0, 0 ];
     for k = 1 : length(targets64),
@@ -90,12 +85,8 @@ if need_rebuild,
     disp( 'Attempting to recompile the SDPT3 binaries:' );
     % Note the use of 0.01 here. That's because version 7 had more than 10
     % minor releases, so 7.10-7.14 need to be ordered after 7.01-7.09.
-    if ispc,
-        flags = {'-DPC'};
-    elseif isunix,
-        flags = {'-DUNIX'};
-    end
     libs = {};
+    flags = {'-O'};
     if ISOCTAVE,
         % Octave has mwSize and mwIndex hardcoded in mex.h as ints.
         % There is no definition for mwSignedIndex so include it here.  
@@ -103,9 +94,12 @@ if need_rebuild,
         if VERSION < 3.08,
             flags{end+1} = '-DmwSignedIndex=int';
         end
-        libs{end+1} = '-lblas';
     else
-        flags{end+1} = '-O';
+        if ispc,
+            flags = {'-DPC'};
+        elseif isunix,
+            flags = {'-DUNIX'};
+        end
         if strcmp(COMPUTER(end-1:end),'64') && ( VERSION >= 7.03 ),
             flags{end+1} = '-largeArrayDims';
         elseif VERSION < 7.03,
@@ -115,7 +109,7 @@ if need_rebuild,
         end
         if VERSION >= 7 && ispc,
             if IS64BIT, dirval = 'win64'; else dirval = 'win32'; end
-            libdir = [ matlabroot, fs, 'external', fs, 'lib', fs, dirval, fs ];
+            libdir = [ matlabroot, fs, 'extern', fs, 'lib', fs, dirval, fs ];
             if exist( [ libdir, 'microsoft' ], 'dir' ),
                 libdir = [ libdir, 'microsoft' ];
                 found = true;
@@ -198,4 +192,3 @@ else
 end
 
 fprintf('%s\n\n',line);
-
