@@ -6,6 +6,7 @@ function install_sdpt3( varargin )
 %
 
 need_rebuild = any( strcmp( varargin, '-rebuild' ) );
+no_path = any( strcmp( varargin, '-nopath' ) );
 
 targets64={...
     'mexMatvec', 'mexProd2', 'mexProd2nz', 'mexexpand', 'mexinprod', ...
@@ -153,7 +154,11 @@ if need_rebuild,
     end
 end
 
-if any(nfound),
+if ~any(nfound),
+    disp( line );
+    disp( 'SDPT3 was not successfully installed.' );
+    disp( 'Please attempt to correct the errors and try again.' );
+elseif ~no_path,
     disp( line );
     fprintf( 'Adding SDPT3 to the %s path:\n', prog );
     paths = { 'Base', 'Solver', 'HSDSolver', 'Binaries', 'Binaries', 'Examples' ; ...
@@ -185,10 +190,6 @@ if any(nfound),
     disp( line );
     disp('SDPT3 has been succesfully installed.' );
     disp( 'For more information, type "help sdpt3" or see the user guide.')
-else
-    disp( line );
-    disp( 'SDPT3 was not successfully installed.' );
-    disp( 'Please attempt to correct the errors and try again.' );
 end
 
 fprintf('%s\n\n',line);
