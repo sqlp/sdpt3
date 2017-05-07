@@ -14,18 +14,16 @@
 %%              sparse_blk(i) is the size of the ith subblock.
 %%  diag_blk: for generating a column vector of length specified by 
 %%            diag_blk (this corresponds to a diagonal block). 
-%%
 %%  infeas = 1 if want primal infeasible pair of problems
 %%         = 2 if want dual infeasible pair of problems
-%%
 %%  solve = 0 just to initialize
 %%        = 1 if want to solve the problem. 
-%%
-%% SDPT3: version 3.0 
+%%*****************************************************************
+%% SDPT3: version 4.0
 %% Copyright (c) 1997 by
-%% K.C. Toh, M.J. Todd, R.H. Tutuncu
-%% Last modified: 2 Feb 01
-%%******************************************************************
+%% Kim-Chuan Toh, Michael J. Todd, Reha H. Tutuncu
+%% Last Modified: 16 Sep 2004
+%%*****************************************************************
 
    function  [blk,Avec,C,b,X0,y0,Z0] = ...
                 randinfsdp(dense_blk,sparse_blk,diag_blk,m,infeas,solve);

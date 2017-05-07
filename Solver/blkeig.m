@@ -1,15 +1,15 @@
-%%***************************************************************************
+%%*****************************************************************
 %% blkeig: compute eigenvalue decomposition of a cell array
 %%         whose contents are square matrices or the diagonal
 %%         of a diagonal matrix.
 %%
 %% [d,V] = blkeig(blk,X);
-%%
-%% SDPT3: version 3.1
+%%*****************************************************************
+%% SDPT3: version 4.0
 %% Copyright (c) 1997 by
 %% K.C. Toh, M.J. Todd, R.H. Tutuncu
 %% Last Modified: 16 Sep 2004
-%%***************************************************************************
+%%*****************************************************************
 
 function [d,V] = blkeig(blk,X)
 

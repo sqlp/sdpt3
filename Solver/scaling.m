@@ -5,12 +5,12 @@
 %%
 %%  The linear objective function value is unchanged under 
 %%  the scaling. 
-%%
-%% SDPT3: version 3.1
+%%*****************************************************************
+%% SDPT3: version 4.0
 %% Copyright (c) 1997 by
-%% K.C. Toh, M.J. Todd, R.H. Tutuncu
+%% Kim-Chuan Toh, Michael J. Todd, Reha H. Tutuncu
 %% Last Modified: 16 Sep 2004
-%%********************************************************************
+%%*****************************************************************
 
    function [At,C,b,normA,normC,normb,X0,y0,Z0] = scaling(blk,At,C,b,X0,y0,Z0) 
 

@@ -12,10 +12,14 @@
 %% m1 = number of general constraints
 %% m2 = number of low-rank constraints
 %% r = rank of each constraint matrix. 
-%%
-%%******************************************************************
+%%*****************************************************************
+%% SDPT3: version 4.0
+%% Copyright (c) 1997 by
+%% Kim-Chuan Toh, Michael J. Todd, Reha H. Tutuncu
+%% Last Modified: 16 Sep 2004
+%%*****************************************************************
 
-  function [blk2,At2,C,b,blk,At] = randlowranksdp(n,m1,m2,r);
+  function [blk2,At2,C,b,blk,At] = randlowranksdp(n,m1,m2,r)
 
   blk = cell(1,2);
   if (m1 > 0) 
@@ -39,14 +43,14 @@
   At2{1,1} = At0{1}; 
 %%******************************************************************
 %%******************************************************************
-  function [blk2,At2,C,b,blk,At] = randlowranksdpfun(n,m,r);
+  function [blk2,At2,C,b,blk,At] = randlowranksdpfun(n,m,r)
 
   randn('state',0);
 
   blk{1,1} = 's'; blk{1,2} = n; 
   blk2{1,1} = 's'; blk2{1,2} = n; blk2{1,3} = r*ones(1,m); 
   %%
-  %% construct data low rank structure
+  %% construct data with low rank structure
   %%
   At2 = cell(1,3); 
   b = zeros(m,1); 

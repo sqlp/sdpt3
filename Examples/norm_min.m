@@ -19,8 +19,7 @@
 %%         + sum_{k=m+1}^{2m} xk*[           ] -t*I <= -[       ] 
 %%                               [(i*Bk)^*, 0]          [B0^*, 0]
 %%
-%% Adapted from Vandenberghe and Boyd, SIAM Review 96. 
-%% see also igmres.m 
+%% See also igmres.m 
 %%-------------------------------------------------------------------- 
 %%
 %%  [blk,Avec,C,b,X0,y0,Z0,objval,x] = norm_min(B,feas,solve); 
@@ -30,12 +29,12 @@
 %%                 = 0 if otherwise.
 %%           solve = 0 just to initialize
 %%                 = 1 if want to solve the problem. 
-%%
-%% SDPT3: version 3.0 
+%%*****************************************************************
+%% SDPT3: version 4.0
 %% Copyright (c) 1997 by
-%% K.C. Toh, M.J. Todd, R.H. Tutuncu
-%% Last modified: 2 Feb 01
-%%*********************************************************************
+%% Kim-Chuan Toh, Michael J. Todd, Reha H. Tutuncu
+%% Last Modified: 16 Sep 2004
+%%*****************************************************************
 
    function [blk,Avec,C,b,X0,y0,Z0,objval,x] = norm_min(B,feas,solve);   
 
@@ -98,8 +97,8 @@
       [X0,y0,Z0] = infeaspt(blk,Avec,C,b); 
    end 
    if (solve) 
-      [obj,X,y,Z] = sqlp(blk,Avec,C,b,[],X0,y0,Z0);
-      objval = -mean(obj); 
+      [obj,X,y,Z] = HSDsqlp(blk,Avec,C,b,[],X0,y0,Z0);
+      objval = -obj(2); 
       if ~cmp; x = y(1:m); 
       else;    x = y(1:m) +sqrt(-1)*y(m+1:2*m); 
       end;

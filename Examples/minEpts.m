@@ -11,8 +11,12 @@
 %% Vandenberghe, Boyd, Wu, Determinant maximization with linear 
 %% matrix inequalities, SIAM J. Matrix Analysis and Applications,
 %% 19 (1998), pp. 499--533.
-%%
-%%********************************************************************
+%%*****************************************************************
+%% SDPT3: version 4.0
+%% Copyright (c) 1997 by
+%% Kim-Chuan Toh, Michael J. Todd, Reha H. Tutuncu
+%% Last Modified: 16 Sep 2004
+%%*****************************************************************
 
   function  [blk,At,C,b,OPTIONS,B,d] = minEpts(V,solve)
 

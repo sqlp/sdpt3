@@ -7,11 +7,17 @@
 *  Important: U is assumed to be dense. 
 *********************************************************************/
 
-#include <mex.h>
+#include "mex.h"
 #include <math.h>
+#include "matrix.h"
+#include "header.h"
 
 #if !defined(SQR)
 #define SQR(x) ((x)*(x))
+#endif
+
+#if !defined(MIN)
+#define  MIN(A, B)   ((A) < (B) ? (A) : (B))
 #endif
 
 /**************************************************************

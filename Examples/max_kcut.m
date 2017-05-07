@@ -15,12 +15,12 @@
 %%       = 1 if want to solve the problem. 
 %%
 %% See graph.m --- generate random adjacency matrix. 
-%%
-%% SDPT3: version 4.0 
+%%*****************************************************************
+%% SDPT3: version 4.0
 %% Copyright (c) 1997 by
-%% K.C. Toh, M.J. Todd, R.H. Tutuncu
-%% Last modified: 18 May 07
-%%*******************************************************
+%% Kim-Chuan Toh, Michael J. Todd, Reha H. Tutuncu
+%% Last Modified: 16 Sep 2004
+%%*****************************************************************
 
  function [blk,Avec,C,b,objval,X] = max_kcut(B,K,solve);
 

@@ -13,12 +13,12 @@
 %%                     U  = xij*(ei*ej' + ej*ei')
 %%                    xij = 1/2       if i=j
 %%                        = 1/sqrt(2) otherwise.
-%%
-%% SDPT3: version 3.1
+%%*****************************************************************
+%% SDPT3: version 4.0
 %% Copyright (c) 1997 by
-%% K.C. Toh, M.J. Todd, R.H. Tutuncu
+%% Kim-Chuan Toh, Michael J. Todd, Reha H. Tutuncu
 %% Last Modified: 16 Sep 2004
-%%***********************************************************************
+%%*****************************************************************
 
 function K = skron(blk,A,B)
 

@@ -15,12 +15,12 @@
 %% f = px1 vector,  [B(:,j)./f must be positive for each j]  
 %% solve = 0 if just want initialization. 
 %%       = 1 if want to solve the problem. 
-%%
-%% SDPT3: version 3.0 
+%%*****************************************************************
+%% SDPT3: version 4.0
 %% Copyright (c) 1997 by
-%% K.C. Toh, M.J. Todd, R.H. Tutuncu
-%% Last modified: 2 Feb 01
-%%***************************************************************
+%% Kim-Chuan Toh, Michael J. Todd, Reha H. Tutuncu
+%% Last Modified: 16 Sep 2004
+%%*****************************************************************
 
   function [blk,At,C,b,objval,x] = logchebyRcone(B,f,solve);
  

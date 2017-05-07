@@ -12,12 +12,12 @@
 %%                  
 %%  output: Ay = sum_{k=1}^m y(k)*Ak, a column CELL ARRAY 
 %%               with the same structure as A{:,1}. 
-%%              
-%% SDPT3: version 3.0
+%%*****************************************************************
+%% SDPT3: version 4.0
 %% Copyright (c) 1997 by
-%% K.C. Toh, M.J. Todd, R.H. Tutuncu
-%% Last Modified: 2 Feb 01
-%%*************************************************************
+%% Kim-Chuan Toh, Michael J. Todd, Reha H. Tutuncu
+%% Last Modified: 16 Sep 2004
+%%*****************************************************************
 
    function Ay = Asum(blk,A,y)
 

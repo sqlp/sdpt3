@@ -6,13 +6,12 @@
 %%
 %%  Ak = -e*e'   if k = 1
 %%     = -ek*ek' if k > 1. 
-%%
-%% SDPT3: version 2.1
+%%*****************************************************************
+%% SDPT3: version 4.0
 %% Copyright (c) 1997 by
-%% K.C. Toh, M.J. Todd, R.H. Tutuncu
-%% Last Modified: 7 Jul 99
-%%****************************************************
-
+%% Kim-Chuan Toh, Michael J. Todd, Reha H. Tutuncu
+%% Last Modified: 16 Sep 2004
+%%*****************************************************************
   function schur = gppschur(X,Zinv,schurfun_par); 
     
    n = size(X,1); 

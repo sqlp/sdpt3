@@ -1,7 +1,7 @@
 /*****************************************************************************
 * mexschur.c : C mex file to compute  
 *          
-*    mexschur(blk,Avec,nzlistA1,nzlistA2,permA,U,V,colend,type,schur);  
+*    schur=mexschur(blk,Avec,nzlistA1,nzlistA2,permA,U,V,colend,type,schur);  
 *
 *    schur(I,J) = schur(I,J) + Trace(Ai U Aj V),
 *    where I = permA[i], J = permA[j],   1<=i,j<=colend. 
@@ -20,8 +20,11 @@
 * Last Modified: 2 Feb 01   
 ****************************************************************************/
 
-#include <mex.h>
+#include "mex.h"
 #include <math.h>
+#include <string.h>
+#include "matrix.h"
+#include "header.h"
 
 #if !defined(MAX)
 #define  MAX(A, B)   ((A) > (B) ? (A) : (B))
@@ -255,17 +258,17 @@ for (i=0; i<=col; i++) {
                  idx1 = ra+idxrb; idx2 = ca+idxcb; 
                  if (ra<ca) {
                     idx3 = ra+idxcb; idx4 = ca+idxrb; 
-	            tmp3 += Avec[k] * (Utmp[idx1]*Vtmp[idx2] +Utmp[idx2]*Vtmp[idx1] \
+	                tmp3 += Avec[k] * (Utmp[idx1]*Vtmp[idx2] +Utmp[idx2]*Vtmp[idx1] \
                                    +Utmp[idx3]*Vtmp[idx4] +Utmp[idx4]*Vtmp[idx3]); 
                  } else {
-	            tmp4 += Avec[k] * (Utmp[idx1]*Vtmp[idx2] +Utmp[idx2]*Vtmp[idx1]); 
-		 }
+	                tmp4 += Avec[k] * (Utmp[idx1]*Vtmp[idx2] +Utmp[idx2]*Vtmp[idx1]); 
+                 }
                  if (firstime) { kstartnew = k; firstime = 0; }  
-	      }
+              }
               else if (calk > cblk) {
-	         break;
-	      }
-	  }
+	             break;
+              }
+          }
           kstart = kstartnew; 
           if (rb<cb) { tmp1 += Avec[l]*(ir2*tmp3 + tmp4); }
           else       { tmp2 += Avec[l]*(ir2*tmp3 + tmp4); } 
@@ -350,7 +353,6 @@ void mexFunction(int nlhs,   mxArray  *plhs[],
     colend = (int)*mxGetPr(prhs[7]); 
     type   = (int)*mxGetPr(prhs[8]); 
 
-    schur = mxGetPr(prhs[9]); 
     m = mxGetM(prhs[9]);    
     if (m!= m1) {
        mexErrMsgTxt("mexschur: schur and permA are not compatible"); }
@@ -364,12 +366,15 @@ void mexFunction(int nlhs,   mxArray  *plhs[],
 * output 
 ************************************/
 
-    plhs[0] = mxCreateDoubleMatrix(1,1,mxREAL); 
-    nzschur = mxGetPr(plhs[0]); 
-    if (nlhs==2) {
+    plhs[0] = mxCreateDoubleMatrix(m,m,mxREAL); 
+    schur = mxGetPr(plhs[0]); 
+    memcpy(schur,mxGetPr(prhs[9]),(m*m)*sizeof(double));    
+    plhs[1] = mxCreateDoubleMatrix(1,1,mxREAL); 
+    nzschur = mxGetPr(plhs[1]); 
+    if (nlhs==3) {
        nzP = (int) (0.2*m*m+5); 
-       plhs[1] = mxCreateSparse(m,colend,nzP,mxREAL); 
-       P=mxGetPr(plhs[1]); irP=mxGetIr(plhs[1]); jcP=mxGetJc(plhs[1]); 
+       plhs[2] = mxCreateSparse(m,colend,nzP,mxREAL); 
+       P=mxGetPr(plhs[2]); irP=mxGetIr(plhs[2]); jcP=mxGetJc(plhs[2]); 
        jcP[0] = 0; 
     }
 /************************************
@@ -424,16 +429,16 @@ void mexFunction(int nlhs,   mxArray  *plhs[],
     schurcol = (double*)mxCalloc(colend,sizeof(double)); 
     count = 0;
  
-    for (col=0; col<colend; col++) { 
+for (col=0; col<colend; col++) { 
 	if (existP) {
 	   setvec(col,schurcol,0.0); 
            for (k=jcP[col]; k<jcP[col+1]; k++) { schurcol[irP[k]]=1.0;}
 	} else {
 	   setvec(col,schurcol,1.0); 
-	}
-        if (opt==1) { 
+    }
+    if (opt==1) { 
  	   schurij1(n,Avec,idxstart,nzlistAi,nzlistAj,U,col,schurcol); 
-        } else if (opt==3) { 
+    } else if (opt==3) { 
            schurij3(n,Avec,idxstart,nzlistAi,nzlistAj,U,V,col,schurcol);
 	} else if (opt==2) {
            schurij2(Avec,idxstart,nzlistAi,nzlistAj,Utmp, \
@@ -442,17 +447,17 @@ void mexFunction(int nlhs,   mxArray  *plhs[],
            schurij4(Avec,idxstart,nzlistAi,nzlistAj,Utmp,Vtmp, \
 	            nzlistAr,nzlistAc,cumblksize,blkidx,col,schurcol);  
 	}
-        for (row=0; row<=col; row++) {
+    for (row=0; row<=col; row++) {
 	    if (schurcol[row] != 0) {
 	       if (count<nzP && nlhs==2) { jcP[col+1]=count+1; irP[count]=row; P[count]=1; }
 	       count++; 
    	       idx1 = permA[row]+colm[col]; 
-               idx2 = permA[col]+colm[row]; 
-               schur[idx1] += schurcol[row];
-               schur[idx2] = schur[idx1]; 
-            }
-	}
+           idx2 = permA[col]+colm[row]; 
+           schur[idx1] += schurcol[row];
+           schur[idx2] = schur[idx1]; 
+        }
     }
+}
     
     nzschur[0] = count;
 

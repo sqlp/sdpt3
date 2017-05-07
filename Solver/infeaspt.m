@@ -1,16 +1,16 @@
-%%********************************************************************
+%%******************************************************************
 %% infeaspt: generate an initial point for sdp.m
 %%
 %%  [X0,y0,Z0] = infeaspt(blk,At,C,b,options,scalefac);
 %%
 %%  options = 1  if want X0,Z0 to be scaled identity matrices
 %%          = 2  if want X0,Z0 to be scalefac*(identity matrices).
-%%
-%% SDPT3: version 3.1
+%%*****************************************************************
+%% SDPT3: version 4.0
 %% Copyright (c) 1997 by
-%% K.C. Toh, M.J. Todd, R.H. Tutuncu
+%% Kim-Chuan Toh, Michael J. Todd, Reha H. Tutuncu
 %% Last Modified: 16 Sep 2004
-%%********************************************************************
+%%*****************************************************************
 
 function [X0,y0,Z0] = infeaspt(blk,At,C,b,options,scalefac)
 %%

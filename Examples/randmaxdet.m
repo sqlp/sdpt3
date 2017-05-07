@@ -8,12 +8,12 @@
 %% n = dimension of SDP variable X1
 %% p = dimension of logdet variable X2
 %% m = number of equality constraints
-%%
-%% SDPT3: version 3.0 
+%%*****************************************************************
+%% SDPT3: version 4.0
 %% Copyright (c) 1997 by
-%% K.C. Toh, M.J. Todd, R.H. Tutuncu
-%% Last modified: 2 Feb 01
-%%***************************************************************
+%% Kim-Chuan Toh, Michael J. Todd, Reha H. Tutuncu
+%% Last Modified: 16 Sep 2004
+%%*****************************************************************
 
   function [blk,At,C,b,OPTIONS] = randmaxdet(n,p,m);
    

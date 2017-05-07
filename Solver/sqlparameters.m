@@ -1,5 +1,5 @@
 %%*************************************************************************
-%% parameters.m: set OPTIONS structure to specify default
+%% sqlparameters.m: set OPTIONS structure to specify default
 %%               parameters for sqlp.m
 %%
 %% OPTIONS.vers        : version of direction to use.
@@ -62,11 +62,12 @@
 %%                       OPTIONS.schurfun_par{1} = [];
 %%                       OPTIONS.schurfun_par{2,1} = par1;
 %%                       OPTIONS.schurfun_par{2,2} = par2;
-%% SDPT3: version 3.1
+%%*****************************************************************
+%% SDPT3: version 4.0
 %% Copyright (c) 1997 by
-%% K.C. Toh, M.J. Todd, R.H. Tutuncu
+%% Kim-Chuan Toh, Michael J. Todd, Reha H. Tutuncu
 %% Last Modified: 16 Sep 2004
-%%*************************************************************************
+%%*****************************************************************
 
 function OPTIONS = sqlparameters
 

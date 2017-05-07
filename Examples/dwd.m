@@ -24,11 +24,12 @@
 %% are on the wrong side of the hyperplane: they can be moved a 
 %% distance d at a cost penalty*d to put them on the right side.
 %%
-%% SDPT3: version 3.0 
+%%*****************************************************************
+%% SDPT3: version 4.0
 %% Copyright (c) 1997 by
-%% K.C. Toh, M.J. Todd, R.H. Tutuncu
-%% Last modified: 20 Apr 02
-%%******************************************************************
+%% Kim-Chuan Toh, Michael J. Todd, Reha H. Tutuncu
+%% Last Modified: 16 Sep 2004
+%%*****************************************************************
 
    function [w,beta,residp,residn,totalviolation,X,y,Z] = ...
              dwd(Ap,An,penalty);

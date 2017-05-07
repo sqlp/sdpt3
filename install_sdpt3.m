@@ -131,22 +131,23 @@ if need_rebuild,
             libs{end+1} = '-lmwlapack';
         end
     end
-    libs = sprintf( ' %s', libs{:} );
-    flags = sprintf( ' %s', flags{:} );
     olddir = pwd;
     cd( mbase );
     failed = false;
-    fprintf( 'Template: mex%s <sources>%s\n', flags, libs );
     for i=1:length(targets64),
         targ = targets64{i};
-        mfile = [ targ(1:min(strfind(targ,'.'))), mext ];
-        temp = [ 'mex ', flags, ' ', targets64{i}, '.c ', libs ];
-        fprintf( '   %s: %s\n', mfile, targ );
-        eval( temp, 'failed=true;' ); %#ok
+        template = [{'mex'}, flags, {[targ, '.c']}, libs ];
+        fprintf( '    %s: %s\n', targ, sprintf(' %s', template{:}) );
+        try
+            feval(template{:});
+        catch exc
+            fprintf('        ERROR: %s\n', exc.message);
+            failed = true;
+        end
     end
     cd( olddir );
     if failed,
-        fprintf( 'At least one compilation failure occurred.\n' ); %#ok
+        fprintf( 'At least one compilation failure occurred.\n' );
         nfound = [0,0];
     else
         fprintf( 'Compilation successful.\n' );

@@ -1,8 +1,13 @@
-%%******************************************************
+%%*****************************************************************
 %% randmat: generate an mxn matrix using matlab's
 %%          rand or randn functions using state = k.
-%%
-%%******************************************************
+%%*****************************************************************
+%% SDPT3: version 4.0
+%% Copyright (c) 1997 by
+%% Kim-Chuan Toh, Michael J. Todd, Reha H. Tutuncu
+%% Last Modified: 16 Sep 2004
+%%*****************************************************************
+
 function v = randmat(m,n,k,randtype)
 
 try

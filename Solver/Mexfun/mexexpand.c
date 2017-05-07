@@ -14,8 +14,10 @@
 * Last Modified: 2 Feb 01   
 ***********************************************************************/
 
-#include <mex.h>
+#include "mex.h"
 #include <math.h>
+#include "matrix.h"
+#include "header.h"
 
 #if !defined(MAX)
 #define  MAX(A, B)   ((A) > (B) ? (A) : (B))

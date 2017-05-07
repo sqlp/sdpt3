@@ -1,4 +1,4 @@
-%%**********************************************************
+%%*****************************************************************
 %% SDPT3soln_SEDUMIsoln: convert SQLP solution in SDPT3 format to
 %%                       SeDuMi format
 %%
@@ -8,12 +8,12 @@
 %%        [blk,At,C,b,perm] = read_sedumi(A,b,c,K);
 %%        [obj,X,y,Z]  = sdpt3(blk,At,C,b);
 %%        [xx,yy,zz]   = SDPT3soln_SEDUMIsoln(blk,X,y,Z,perm);
-%%
-%% SDPT3: version 3.1
+%%*****************************************************************
+%% SDPT3: version 4.0
 %% Copyright (c) 1997 by
-%% K.C. Toh, M.J. Todd, R.H. Tutuncu
+%% Kim-Chuan Toh, Michael J. Todd, Reha H. Tutuncu
 %% Last Modified: 16 Sep 2004
-%%**********************************************************
+%%*****************************************************************
 
 function [xx,yy,zz] = SDPT3soln_SEDUMIsoln(blk,X,y,Z,perm)
 

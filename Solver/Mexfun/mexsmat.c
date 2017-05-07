@@ -9,8 +9,10 @@
 * Last Modified: 2 Feb 01   
 ***********************************************************************/
 
-#include <mex.h>
+#include "mex.h"
 #include <math.h>
+#include "matrix.h"
+#include "header.h"
 
 /**********************************************************
 * form Q using the upper triangular part
@@ -442,7 +444,7 @@ void mexFunction(int nlhs,   mxArray  *plhs[],
 #if defined HAVE_OCTAVE
         mexCallMATLAB(1, &plhs[0],2, rhs, "plus");  
 #else
-       mexCallMATLAB(1, &plhs[0],2, rhs, "+");  
+        mexCallMATLAB(1, &plhs[0],2, rhs, "+");  
 #endif
         mxDestroyArray(*rhs); 
      }

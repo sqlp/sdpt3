@@ -7,12 +7,12 @@
 %%                 SDPA foramt.
 %%  Important: the data is assumed to contain only
 %%             semidefinite and linear blocks.
-%%
-%% SDPT3: version 3.1
+%%*****************************************************************
+%% SDPT3: version 4.0
 %% Copyright (c) 1997 by
-%% K.C. Toh, M.J. Todd, R.H. Tutuncu
+%% Kim-Chuan Toh, Michael J. Todd, Reha H. Tutuncu
 %% Last Modified: 16 Sep 2004
-%%******************************************************************
+%%*****************************************************************
 
 function [blk,At,C,b] = read_sdpa(fname)
 
@@ -116,11 +116,11 @@ if ~isempty(spblkidxtmp)
             spblkidxall{q} = spblkidxtmp([(q-1)*maxnumblk+1: length(spblkidxtmp)]); %#ok
         end
         tmp = blksize(spblkidxall{q});
-        blk{denumblk+q,1} = 's'; %#ok
-        blk{denumblk+q,2} = tmp; %#ok
+        blk{denumblk+q,1} = 's';
+        blk{denumblk+q,2} = tmp;
         n2 = sum(tmp.*(tmp+1))/2;
-        At{denumblk+q,1} = sparse(n2,m); %#ok
-        C{denumblk+q,1} = sparse(sum(tmp),sum(tmp)); %#ok
+        At{denumblk+q,1} = sparse(n2,m);
+        C{denumblk+q,1} = sparse(sum(tmp),sum(tmp));
     end
 else
     spnumblk = 0;
@@ -157,12 +157,12 @@ for k = 1:length(matidx)-1
             tmp = -sparse(ii,ones(len,1),vv,abs(n),1);
         end
         if (matno == 0)
-            C{p,1} = tmp; %#ok
+            C{p,1} = tmp;
         else
             if (n > 1)
-                At{p,1}(:,matno) = svec(blk(p,:),tmp,1); %#ok
+                At{p,1}(:,matno) = svec(blk(p,:),tmp,1);
             else
-                At{p,1}(:,matno) = tmp; %#ok
+                At{p,1}(:,matno) = tmp;
             end
         end
     end
@@ -213,9 +213,9 @@ if (spnumblk > 0)
                 tmp = spconvert([ii jj -vv; jj ii -vv; n n 0]) ...
                     + spconvert([ii(idxeq) jj(idxeq) vv(idxeq); n n 0]);
                 if (matno == 0)
-                    C{denumblk+q,1} = tmp; %#ok
+                    C{denumblk+q,1} = tmp;
                 else
-                    At{denumblk+q,1}(:,matno) = svec(blk(denumblk+q,:),tmp,1); %#ok
+                    At{denumblk+q,1}(:,matno) = svec(blk(denumblk+q,:),tmp,1);
                 end
             end
         end

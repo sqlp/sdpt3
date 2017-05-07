@@ -1,14 +1,14 @@
-%%*************************************************************************
+%%*****************************************************************
 %% linsysolvefun: Solve H*x = b
 %%
 %% x = linsysolvefun(L,b)
 %% where L contains the triangular factors of H.
-%%
-%% SDPT3: version 3.1
+%%*****************************************************************
+%% SDPT3: version 4.0
 %% Copyright (c) 1997 by
-%% K.C. Toh, M.J. Todd, R.H. Tutuncu
+%% Kim-Chuan Toh, Michael J. Todd, Reha H. Tutuncu
 %% Last Modified: 16 Sep 2004
-%%*************************************************************************
+%%*****************************************************************
 
 function x = linsysolvefun(L,b)
 

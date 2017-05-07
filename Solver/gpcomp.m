@@ -12,7 +12,12 @@
 %%         That is,
 %%         norm(b-AXfun(blk,At,[],Xfeas))
 %%         should be small
-%%*********************************************************************
+%%*****************************************************************
+%% SDPT3: version 4.0
+%% Copyright (c) 1997 by
+%% Kim-Chuan Toh, Michael J. Todd, Reha H. Tutuncu
+%% Last Modified: 16 Sep 2004
+%%*****************************************************************
 
 function [gp,info,Xfeas,blk2,At2,C2,b2] = gpcomp(blk,At,C,b,OPTIONS,solveyes)
 

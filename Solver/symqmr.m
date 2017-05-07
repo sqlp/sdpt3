@@ -1,4 +1,4 @@
-%%*************************************************************************
+%%******************************************************************
 %% symqmr: symmetric QMR with left (symmetric) preconditioner.
 %%         The preconditioner used is based on the analytical
 %%         expression of inv(A).
@@ -18,12 +18,12 @@
 %%    M = not relevant.
 %% end
 %% resnrm = norm of qmr-generated residual vector b-Ax.
-%%
-%% SDPT3: version 3.1
+%%*****************************************************************
+%% SDPT3: version 4.0
 %% Copyright (c) 1997 by
-%% K.C. Toh, M.J. Todd, R.H. Tutuncu
+%% Kim-Chuan Toh, Michael J. Todd, Reha H. Tutuncu
 %% Last Modified: 16 Sep 2004
-%%*************************************************************************
+%%*****************************************************************
 
 function  [xx,resnrm,solve_ok] = symqmr(A,b,L,tol,maxit,printlevel)
 

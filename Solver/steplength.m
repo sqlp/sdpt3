@@ -1,13 +1,14 @@
-%%***************************************************************************
+%%*****************************************************************
 %% steplength: compute xstep such that  X + xstep*dX >= 0.
 %%
 %% [xstep] = steplength(blk,X,dX,Xchol,invXchol);
 %%
-%% SDPT3: version 3.1
+%%*****************************************************************
+%% SDPT3: version 4.0
 %% Copyright (c) 1997 by
-%% K.C. Toh, M.J. Todd, R.H. Tutuncu
+%% Kim-Chuan Toh, Michael J. Todd, Reha H. Tutuncu
 %% Last Modified: 16 Sep 2004
-%%***************************************************************************
+%%*****************************************************************
 
 function [xstep,invXchol] = steplength(blk,X,dX,Xchol,invXchol)
 
@@ -29,7 +30,7 @@ for p = 1:size(blk,1)
         if (use_lanczos)
             tol = 1e-3;
             maxit = max(min(pblksize,30),round(sqrt(pblksize)));
-            [lam,delta] = lanczosfun(Xchol{p},-dX{p},maxit,tol);
+             [lam,delta,res] = lanczosfun(Xchol{p},-dX{p},maxit,tol); %#ok
             %%
             %% Note: lam <= actual largest eigenvalue <= lam + delta.
             %%

@@ -1,11 +1,11 @@
-%%***************************************************************************
+%%*****************************************************************
 %% sqlpu2lblk: decide whether to convert ublk to lblk
-%%
-%% SDPT3: version 3.1
+%%*****************************************************************
+%% SDPT3: version 4.0
 %% Copyright (c) 1997 by
-%% K.C. Toh, M.J. Todd, R.H. Tutuncu
-%% Last Modified: 10 Jul 2007
-%%***************************************************************************
+%% Kim-Chuan Toh, Michael J. Todd, Reha H. Tutuncu
+%% Last Modified: 16 Sep 2004
+%%*****************************************************************
 
 function [blk,At,C,X,Z,ublk2lblk,ublkidx] = sqlpu2lblk(blk,At,C,X,Z,par,convertlen)
 

@@ -1,14 +1,15 @@
-%%*********************************************************************
+%%*****************************************************************
 %% sortA: sort columns of At{p} in ascending order according to the
 %%        number of nonzero elements.
 %%
 %% [At,C,b,X0,Z0,permA,permZ] = sortA(blk,At,C,b,X0,Z0);
 %%
-%% SDPT3: version 3.1
+%%*****************************************************************
+%% SDPT3: version 4.0
 %% Copyright (c) 1997 by
-%% K.C. Toh, M.J. Todd, R.H. Tutuncu
+%% Kim-Chuan Toh, Michael J. Todd, Reha H. Tutuncu
 %% Last Modified: 16 Sep 2004
-%%*********************************************************************
+%%*****************************************************************
 
 function [At,C,X0,Z0,permA,permZ] = sortA(blk,At,C,b,X0,Z0)
 

@@ -19,12 +19,12 @@
 %% n = size(A1,2); N = n*(n+1)/2; dlen = size(B,2); 
 %% P = smat(blk(1,:),y(1:N)); 
 %% d = y(N+[1:dlen]); 
-%%
-%% SDPT3: version 3.0 
+%%*****************************************************************
+%% SDPT3: version 4.0
 %% Copyright (c) 1997 by
-%% K.C. Toh, M.J. Todd, R.H. Tutuncu
-%% Last modified: 20 Apr 02
-%%***********************************************************
+%% Kim-Chuan Toh, Michael J. Todd, Reha H. Tutuncu
+%% Last Modified: 16 Sep 2004
+%%*****************************************************************
 
    function [blk,Avec,C,b] = lmiexamp2(A1,A2,B); 
 

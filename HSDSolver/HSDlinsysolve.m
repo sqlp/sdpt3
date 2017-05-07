@@ -1,16 +1,16 @@
-%%***************************************************************
+%%*****************************************************************
 %% linsysolve: solve linear system to get dy, and direction
 %%             corresponding to unrestricted variables.
 %%
 %% [xx,coeff,L,resnrm] = linsysolve(schur,UU,EE,Bmat,rhs);
 %%
 %% child functions: mybicgstable.m
-%%
-%% SDPT3: version 3.1
+%%*****************************************************************
+%% SDPT3: version 4.0
 %% Copyright (c) 1997 by
-%% K.C. Toh, M.J. Todd, R.H. Tutuncu
+%% Kim-Chuan Toh, Michael J. Todd, Reha H. Tutuncu
 %% Last Modified: 16 Sep 2004
-%%***************************************************************
+%%*****************************************************************
 
 function [xx,coeff,L,resnrm] = HSDlinsysolve(par,schur,UU,EE,Bmat,rhs)
 
@@ -32,11 +32,11 @@ diagschur = abs(full(diag(schur)));
 const = 1e-2/max(1,norm(par.dy2));
 alpha = max(1e-14,min(1e-10,const*norm(par.rp))/(1+norm(diagschur.*par.dy2)));
 pertdiag = alpha*max(1e-8,diagschur); %% Note: alpha is close to 1e-15.
-mexschurfun(schur,pertdiag);
+    schur = mexschurfun(schur,pertdiag); 
 %%if (printlevel); fprintf(' %3.1e ',alpha); end
 if (par.depconstr) || (min(diagschur) < min([1e-20*max(diagschur), 1e-4]))
     lambda = 0.1*min(1e-14,const*norm(par.rp)/(1+norm(par.diagAAt.*par.dy2)));
-    mexschurfun(schur,lambda*par.diagAAt);
+       schur = mexschurfun(schur,lambda*par.diagAAt);  
     %%if (printlevel); fprintf('*'); end
 end
 if (max(diagschur)/min(diagschur) > 1e14) && (par.blkdim(2) == 0) ...
@@ -46,7 +46,7 @@ if (max(diagschur)/min(diagschur) > 1e14) && (par.blkdim(2) == 0) ...
     pertdiagschur = zeros(m,1);
     if (len > 0 && len < 5) && (norm(rhs(idx)) < tol)
         pertdiagschur(idx) = 1*ones(length(idx),1);
-        mexschurfun(schur,pertdiagschur);
+          schur = mexschurfun(schur,pertdiagschur); 
         if (printlevel); fprintf('#'); end
     end
 end
@@ -97,7 +97,7 @@ if (~use_LU)
     if strcmp(matfct_options,'chol')
         if issparse(schur); schur = full(schur); end;
         if (iter<=5); %%--- to fix strange anonmaly in Matlab
-            mexschurfun(schur,1e-20,2);
+             schur = mexschurfun(schur,1e-20,2); 
         end
         L.matfct_options = 'chol';
         [L.R,indef] = chol(schur);
@@ -147,8 +147,6 @@ end
 %%
 if (use_LU)
     nnzmat = mexnnz(coeff.mat11)+mexnnz(coeff.mat12);
-    % nnzmatdiff = (nnzmat ~= nnzmatold);
-    solve_ok = 1; %#ok
     if ~isempty(coeff.mat22)
         raugmat = [coeff.mat11, coeff.mat12; coeff.mat12', coeff.mat22];
     else

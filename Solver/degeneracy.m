@@ -1,4 +1,4 @@
-%%***************************************************************
+%%****************************************************************
 %% degeneracy: determine if an SDP problem is non-degenerate.
 %%
 %% [ddx,ddz,B1,B2,sig1,sig12] = degeneracy(blk,At,X,y,Z);
@@ -6,8 +6,12 @@
 %% Assume that strict complementarity holds:
 %% for primal non-degeneracy, we need rank([B1 B2]) = m
 %% for dual non-degeneracy,   we need B1 to have full column rank.
-%%
-%%***************************************************************
+%%*****************************************************************
+%% SDPT3: version 4.0
+%% Copyright (c) 1997 by
+%% Kim-Chuan Toh, Michael J. Todd, Reha H. Tutuncu
+%% Last Modified: 16 Sep 2004
+%%*****************************************************************
 
 function [ddx,ddz,XB1,XB2,ZB1,sig1,sig12] = degeneracy(blk,At,X,y,Z)
 

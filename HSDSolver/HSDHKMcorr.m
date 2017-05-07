@@ -1,9 +1,9 @@
 %%*****************************************************************
 %% HSDHKMcorr: corrector step for the HKM direction.
-%%
-%% SDPT3: version 3.1
+%%*****************************************************************
+%% SDPT3: version 4.0
 %% Copyright (c) 1997 by
-%% K.C. Toh, M.J. Todd, R.H. Tutuncu
+%% Kim-Chuan Toh, Michael J. Todd, Reha H. Tutuncu
 %% Last Modified: 16 Sep 2004
 %%*****************************************************************
 
@@ -17,7 +17,6 @@ global solve_ok
 m = length(rp); ncolU = size(coeff.mat12,2);
 rhs = [rhs; zeros(m+ncolU-length(rhs),1)];
 %%
-solve_ok = 1; %#ok
 [xx,resnrm,solve_ok] = HSDbicgstab(coeff,rhs,L,[],[],printlevel);
 if (solve_ok<=0) && (printlevel)
     fprintf('\n  warning: iterative solver fails: %3.1f.',solve_ok);

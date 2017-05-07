@@ -25,9 +25,7 @@
 %%*******************************************************************
 
 function [schur,UU,EE] = schurmat_qblk(blk,At,par,schur,UU,EE,p,dd,ee,xx)
-
-global idxdenAq % nnzschur_qblk
-
+global idxdenAq
 if (nargin == 10); options = 0; else options = 1; end;
 iter = par.iter;
 
@@ -66,17 +64,20 @@ if ~isempty(idxden);
         schur = schur + (tmp + tmp');
     else
         len = length(idxden);
-        w2 = par.gamz{p}./par.gamx{p};
+        w2 = par.gamz{p}./par.gamx{p}; 
         lam = w2(idxden);
         UU = [UU, Ae(:,idxden)*spdiags(sqrt(lam),0,len,len), Ad(:,idxden)];
         tmp = (count+1:count+len)';
         EE = [EE; [tmp, tmp, -lam; len+tmp, len+tmp, ones(len,1)] ];
-        count = count + 2*len;
-        Ae = Ae(:,spcolidx);
-        schur = schur + Ae*Ae';
     end
-else
+else %% either all sparse or all dense
+    if (nnz(Ae)>0.2*numel(Ae))
+        Ae = full(Ae);
+    end
     if (options == 0)
+        if (nnz(Ax)>0.2*numel(Ax))
+            Ax = full(Ax);
+        end
         tmp = Ax*Ae';
         schur = schur + (tmp+tmp');
     else
@@ -94,9 +95,14 @@ if ~isempty(idxdenAq{p});
     UU = [UU, Ad];
     tmp = (count+1:count+len)';
     EE = [EE; [tmp, tmp, -sign(ddsch(idxden))]];
-    % count = count + len;
     ddsch(idxden) = zeros(len,1);
+elseif (nnz(At{p})>0.2*numel(At{p})) % heuristic from sedumi
+    At{p}=full(At{p});
 end
-schurtmp = At{p}' *spdiags(ddsch,0,n,n) *At{p};
-schur = schur + schurtmp;
+if (issparse(At{p}) && exist('spmm','file')==3)
+    schurtmp = spmm(At{p}',spmm(spdiags(ddsch,0,n,n),At{p}));
+else
+    schurtmp = At{p}' *spdiags(ddsch,0,n,n) *At{p};
+end
+schur = sparse(schur + schurtmp);
 %%*******************************************************************

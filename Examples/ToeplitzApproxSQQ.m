@@ -9,7 +9,12 @@
 %%  where B = diag([zeros(n,1); 1])
 %%        q(1) = - Tr(F); q(k+1) = -sum of upper and lower kth diagonals of F
 %%        gam(1) = sqrt(n); gam(k) = sqrt(2*(n-k+1)) for k=2:n 
-%%*************************************************************************
+%%*****************************************************************
+%% SDPT3: version 4.0
+%% Copyright (c) 1997 by
+%% Kim-Chuan Toh, Michael J. Todd, Reha H. Tutuncu
+%% Last Modified: 16 Sep 2004
+%%*****************************************************************
 
  function [blk,At,C,b] =  ToeplitzApproxSQQ(F)
 

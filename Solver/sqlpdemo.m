@@ -6,10 +6,10 @@
 %%
 %% feas = 1 if want feasible initial iterate
 %%      = 0 otherwise
-%%
-%% SDPT3: version 3.1
+%%*****************************************************************
+%% SDPT3: version 4.0
 %% Copyright (c) 1997 by
-%% K.C. Toh, M.J. Todd, R.H. Tutuncu
+%% Kim-Chuan Toh, Michael J. Todd, Reha H. Tutuncu
 %% Last Modified: 16 Sep 2004
 %%*****************************************************************
 
@@ -164,9 +164,9 @@ if nargin == 2;
         if ~isempty(f);
             f = f(f>0);
             tmp = [tmp abs(f)]; %#ok
-            iter(k) = length(f); %#ok
+            iter(k) = length(f);
         else
-            iter(k) = 0; %#ok
+            iter(k) = 0;
         end
     end;
     fymax = exp(log(10)*(round(log10(max(tmp)))+0.5));

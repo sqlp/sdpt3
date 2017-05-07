@@ -71,17 +71,26 @@ for p = 1:size(blk,1)
         end
     else
         decolidx = checkdense(At{p,1}');
+        %% checkdense punts if the matrix has too many dense columns
+        %% in this case we make the whole matrix dense
         if ~isempty(decolidx);
             n2 = size(At{p,1},1);
             dd = ones(n2,1);
             len= length(decolidx);
-            dd(decolidx) = zeros(len,1);
-            AAt = AAt + (abs(At{p,1})' *spdiags(dd,0,n2,n2)) *abs(At{p,1});
-            tmp = At{p,1}(decolidx,:)';
-            UU = [UU, tmp]; %#ok
-            numdencol = numdencol + len;
+            if (len < 0.5*sum(pblk{2})) || (sum(pblk{2}) >= 20)
+                dd(decolidx) = zeros(len,1);
+                AAt = AAt + (abs(At{p,1})' *spdiags(dd,0,n2,n2)) *abs(At{p,1});
+                tmp = At{p,1}(decolidx,:)';
+                UU = [UU, tmp]; %#ok
+                numdencol = numdencol + len;
+            end
         else
-            AAt = AAt + abs(At{p,1})'*abs(At{p,1});
+            if (nnz(At{p,1})>0.2*numel(At{p,1}))
+                Atp=full(abs(At{p,1}));
+            else
+                Atp=abs(At{p,1});
+            end
+            AAt = AAt + Atp'*Atp;
         end
     end
 end
@@ -97,7 +106,8 @@ if ~issparse(AAt); AAt = sparse(AAt); end
 nnzmatold = mexnnz(AAt);
 rho = 1e-15;
 diagAAt = diag(AAt);
-mexschurfun(AAt,rho*max(diagAAt,1));
+%%mexschurfun(AAt,rho*max(diagAAt,1)); %% does not work for 2015b
+AAt = mexschurfun(AAt,rho*max(diagAAt,1));
 [L.R,indef,L.perm] = chol(AAt,'vector');
 L.d = full(diag(L.R)).^2;
 if (indef)

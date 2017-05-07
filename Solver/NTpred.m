@@ -1,16 +1,16 @@
-%%**********************************************************************
+%%*****************************************************************
 %% NTpred: Compute (dX,dy,dZ) for NT direction.
 %%
 %% compute SVD of Xchol*Zchol via eigenvalue decompostion of
 %%     Zchol * X * Zchol' = V * diag(sv2) * V'.
 %% compute W satisfying W*Z*W = X.
 %%     W = G'*G,  where G = diag(sqrt(sv)) * (invZchol*V)'
-%%
-%% SDPT3: version 3.1
+%%*****************************************************************
+%% SDPT3: version 4.0
 %% Copyright (c) 1997 by
-%% K.C. Toh, M.J. Todd, R.H. Tutuncu
+%% Kim-Chuan Toh, Michael J. Todd, Reha H. Tutuncu
 %% Last Modified: 16 Sep 2004
-%%**********************************************************************
+%%*****************************************************************
 
 function [par,dX,dy,dZ,coeff,L,hRd] = ...
     NTpred(blk,At,par,rp,Rd,sigmu,X,Z,Zchol,invZchol)

@@ -9,12 +9,12 @@
 %% Important note: Sedumi's notation for free variables "K.f"
 %%                 is coded in SDPT3 as blk{p,1} = 'u', where
 %%                 "u" is used for unrestricted variables.
-%%
-%% SDPT3: version 3.1
+%%*****************************************************************
+%% SDPT3: version 4.0
 %% Copyright (c) 1997 by
-%% K.C. Toh, M.J. Todd, R.H. Tutuncu
+%% Kim-Chuan Toh, Michael J. Todd, Reha H. Tutuncu
 %% Last Modified: 16 Sep 2004
-%%******************************************************************
+%%*****************************************************************
 
 function [blk,Avec,C,b,perm] = read_sedumi(fname,b,c,K,smallblkdim)
 

@@ -13,12 +13,12 @@
 %%       = 2 if want to solve using sdphlf.m
 %%
 %% p = Chebyshev polynomial of B in Matlab format.
-%%
-%% SDPT3: version 3.0 
+%%*****************************************************************
+%% SDPT3: version 4.0
 %% Copyright (c) 1997 by
-%% K.C. Toh, M.J. Todd, R.H. Tutuncu
-%% Last modified: 2 Feb 01
-%%********************************************************************* 
+%% Kim-Chuan Toh, Michael J. Todd, Reha H. Tutuncu
+%% Last Modified: 16 Sep 2004
+%%*****************************************************************
 
  function [blk,Avec,C,b,X0,y0,Z0,objval,p] = chebymat(B,m,feas,solve);
 

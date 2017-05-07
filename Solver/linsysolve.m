@@ -6,11 +6,12 @@
 %%
 %% child functions: symqmr.m, mybicgstable.m, linsysolvefun.m
 %%
-%% SDPT3: version 3.1
+%%*****************************************************************
+%% SDPT3: version 4.0
 %% Copyright (c) 1997 by
-%% K.C. Toh, M.J. Todd, R.H. Tutuncu
+%% Kim-Chuan Toh, Michael J. Todd, Reha H. Tutuncu
 %% Last Modified: 16 Sep 2004
-%%***************************************************************
+%%*****************************************************************
 
 function [xx,coeff,L,resnrm] = linsysolve(par,schur,UU,Afree,EE,rhs)
 
@@ -59,7 +60,8 @@ if (par.depconstr) || (ratio > 1e10) || (iter < 5)
     %% since it will adversely affect prim_infeas of fp43
     %%
     pertdiagschur = min(rho*diagschur,1e-4./max(1,abs(par.dy)));
-    mexschurfun(schur,full(pertdiagschur));
+       %%mexschurfun(schur,full(pertdiagschur)); %%does not work for R2015b         
+       schur = mexschurfun(schur,full(pertdiagschur)); 
     %%if (printlevel>2); fprintf(' %2.1e',rho); end
 end
 if (par.depconstr) || (par.ZpATynorm > 1e10) || (par.ublksize) || (iter < 10)
@@ -68,7 +70,8 @@ if (par.depconstr) || (par.ZpATynorm > 1e10) || (par.ublksize) || (iter < 10)
     %%
     lam = min(lam,1e-4/max(1,norm(par.AAt*par.dy)));
     if (exist_analytic_term); lam = 0; end
-    mexschurfun(schur,lam*par.AAt);
+       %%mexschurfun(schur,lam*par.AAt); %%does not work for R2015b 
+       schur = mexschurfun(schur,lam*par.AAt); 
     %%if (printlevel>2); fprintf('*'); end
 end
 if (max(diagschur)/min(diagschur) > 1e14) && (par.blkdim(2) == 0) ...
@@ -78,7 +81,8 @@ if (max(diagschur)/min(diagschur) > 1e14) && (par.blkdim(2) == 0) ...
     pertdiagschur = zeros(m,1);
     if (len > 0 && len < 5) && (norm(rhs(idx)) < tol)
         pertdiagschur(idx) = 1*ones(length(idx),1);
-        mexschurfun(schur,pertdiagschur);
+          %%mexschurfun(schur,pertdiagschur);  %%does not work for R2015b 
+          schur = mexschurfun(schur,pertdiagschur);
         numpertdiagschur = numpertdiagschur + 1;
         if (printlevel>2); fprintf('#'); end
     end
@@ -127,7 +131,8 @@ if (~use_LU)
     if strcmp(matfct_options,'chol')
         if issparse(schur); schur = full(schur); end;
         if (iter<=5); %%--- to fix strange anonmaly in Matlab
-            mexschurfun(schur,1e-20,2);
+             %%mexschurfun(schur,1e-20,2); %%doe not work for R2015b
+             schur = mexschurfun(schur,1e-20,2);
         end
         L.matfct_options = 'chol';
         [L.R,indef] = chol(schur);

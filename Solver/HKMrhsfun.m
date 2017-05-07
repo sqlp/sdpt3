@@ -1,12 +1,12 @@
-%%*******************************************************************
+%%*****************************************************************
 %% HKMrhsfun: compute the right-hand side vector of the
 %%            Schur complement equation for the  HKM direction.
-%%
-%% SDPT3: version 3.1
+%%*****************************************************************
+%% SDPT3: version 4.0
 %% Copyright (c) 1997 by
-%% K.C. Toh, M.J. Todd, R.H. Tutuncu
+%% Kim-Chuan Toh, Michael J. Todd, Reha H. Tutuncu
 %% Last Modified: 16 Sep 2004
-%%*******************************************************************
+%%*****************************************************************
 
 function [rhs,EinvRc,hRd] = HKMrhsfun(blk,At,par,X,Z,rp,Rd,sigmu,hRd,dX,dZ)
 

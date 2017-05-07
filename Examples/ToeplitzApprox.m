@@ -2,7 +2,6 @@
 %% ToeplitzApprox: find the nearest symmetric positive definite Toeplitz 
 %%                 matrix to a given symmetric matrix F. 
 %%
-%%
 %%  max -y(n+1)
 %%  s.t.  T(y(1:n)) + y(n+1)*B   >= 0 
 %%        [I   0  ] + sum_{k=1}^n y(k) [0          gam(k)*e_k ]  + y(n+1)*B >= 0 
@@ -12,7 +11,12 @@
 %%        q(1) = - Tr(F); q(k+1) = -sum of upper and lower kth diagonals of F
 %%        gam(1) = sqrt(n); gam(k) = sqrt(2*(n-k+1)) for k=2:n 
 %%        beta = norm(F,'fro')^2
-%%*************************************************************************
+%%*****************************************************************
+%% SDPT3: version 4.0
+%% Copyright (c) 1997 by
+%% Kim-Chuan Toh, Michael J. Todd, Reha H. Tutuncu
+%% Last Modified: 16 Sep 2004
+%%*****************************************************************
 
  function [blk,At,C,b] =  ToeplitzApprox(F)
 

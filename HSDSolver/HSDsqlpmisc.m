@@ -1,14 +1,14 @@
-%%*****************************************************************************
+%%*****************************************************************
 %% HSDsqlpmisc:
 %% produce infeasibility certificates if appropriate
 %%
 %% Input: X,y,Z are the original variables, not the HSD variables.
-%%
-%% SDPT3: version 3.1
+%%*****************************************************************
+%% SDPT3: version 4.0
 %% Copyright (c) 1997 by
-%% K.C. Toh, M.J. Todd, R.H. Tutuncu
-%% Last Modified: 16 Sep 2004.
-%%*****************************************************************************
+%% Kim-Chuan Toh, Michael J. Todd, Reha H. Tutuncu
+%% Last Modified: 16 Sep 2004
+%%*****************************************************************
 
 function [X,y,Z,resid,reldist,param,msg] = HSDsqlpmisc(blk,At,C,b,X,y,Z,permZ,param)
 
@@ -68,7 +68,7 @@ if (termcode == 2)
     if (printlevel); fprintf('\n  %s',msg); end
 end
 if (termcode == 3)
-    maxblowup = max(ops(X,'norm')/normX0,ops(Z,'norm')/normZ0);
+      maxblowup = max(ops(X,'norm')/max(1,normX0),ops(Z,'norm')/max(1,normZ0));
     msg = sprintf('Stop: primal or dual is diverging, %3.1e',maxblowup);
     if (printlevel); fprintf('\n  %s',msg); end
 end

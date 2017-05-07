@@ -1,14 +1,14 @@
-%%**********************************************************
+%%*****************************************************************
 %% SDPT3data_SEDUMIdata: convert SQLP data in SDPT3 format to
 %%                       SeDuMi format
 %%
 %% [At,b,c,K] = SDPT3data_SEDUMIdata(blk,AAt,CC,bb);
-%%
-%% SDPT3: version 3.1
+%%*****************************************************************
+%% SDPT3: version 4.0
 %% Copyright (c) 1997 by
-%% K.C. Toh, M.J. Todd, R.H. Tutuncu
+%% Kim-Chuan Toh, Michael J. Todd, Reha H. Tutuncu
 %% Last Modified: 16 Sep 2004
-%%**********************************************************
+%%*****************************************************************
 
 function [At,b,c,K] = SDPT3data_SEDUMIdata(blk,AAt,CC,bb)
 

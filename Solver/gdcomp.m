@@ -14,8 +14,12 @@
 %%              Rd = ops(C,'-',ops(Zfeas,'+',Aty));
 %%              then
 %%              ops(Rd,'norm') should be small.
-%%
-%%*********************************************************************
+%%*****************************************************************
+%% SDPT3: version 4.0
+%% Copyright (c) 1997 by
+%% Kim-Chuan Toh, Michael J. Todd, Reha H. Tutuncu
+%% Last Modified: 16 Sep 2004
+%%*****************************************************************
 
 function [gd,info,yfeas,Zfeas,blk2,At2,C2,b2] = gdcomp(blk,At,C,b,OPTIONS,solveyes)
 

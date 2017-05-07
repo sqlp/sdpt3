@@ -12,12 +12,12 @@
 %%                = 0, otherwise.
 %% (optional) nzlistQ = list of non-zero elements of Q to be
 %%                      computed.
-%%
-%% SDPT3: version 3.1
+%%*****************************************************************
+%% SDPT3: version 4.0
 %% Copyright (c) 1997 by
-%% K.C. Toh, M.J. Todd, R.H. Tutuncu
+%% Kim-Chuan Toh, Michael J. Todd, Reha H. Tutuncu
 %% Last Modified: 16 Sep 2004
-%%************************************************************
+%%*****************************************************************
 
 function Q = Prod3(blk,A,B,C,sym,nzlistQ)
 

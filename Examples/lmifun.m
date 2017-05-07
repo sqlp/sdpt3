@@ -1,4 +1,4 @@
-%%*********************************************************
+%%****************************************************************
 %% lmifun: generate SDP data for the LMI constraint 
 %%         of the form: 
 %%
@@ -6,7 +6,12 @@
 %%  P and d are variables, P is symmetric.
 %%
 %%  H is optional. 
-%%*********************************************************
+%%*****************************************************************
+%% SDPT3: version 4.0
+%% Copyright (c) 1997 by
+%% Kim-Chuan Toh, Michael J. Todd, Reha H. Tutuncu
+%% Last Modified: 16 Sep 2004
+%%*****************************************************************
 
    function Avec = lmifun(A,B,H)
 

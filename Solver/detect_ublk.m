@@ -5,12 +5,12 @@
 %%
 %% i1,i2: indices corresponding to splitting of unrestricted varaibles
 %% i3   : remaining indices in the linear block
-%%
-%% SDPT3: version 3.1
+%%*****************************************************************
+%% SDPT3: version 4.0
 %% Copyright (c) 1997 by
-%% K.C. Toh, M.J. Todd, R.H. Tutuncu
+%% Kim-Chuan Toh, Michael J. Todd, Reha H. Tutuncu
 %% Last Modified: 16 Sep 2004
-%%*******************************************************************
+%%*****************************************************************
 
 function [blk2,At2,C2,ublkinfo,parbarrier2,X2,Z2] = ...
     detect_ublk(blk,At,C,parbarrier,X,Z,printlevel)
@@ -38,17 +38,23 @@ for p = 1:numblk
         % stime = cputime;
         Ap = At{p}'; Cp = C{p};
         ApTr = (r*Ap)';
-        [sApTr,perm] = sort(abs(ApTr));
-        idx0 = find(abs(diff(sApTr)) < tol);
-        if ~isempty(idx0)
+        [dummy,II] = intersect(ApTr,-ApTr); %#ok
+        if ~isempty(II)
+            [tmp,perm] = sort(abs(ApTr(II)));
+            idx0 = find(diff(tmp) < tol);
+            i1 = II(perm(idx0));
+            i2 = II(perm(idx0+1));
             n = pblk{2};
-            i1 = perm(idx0); i2 = perm(idx0+1);
             Api1 = Ap(:,i1);
             Api2 = Ap(:,i2);
             Cpi1 = Cp(i1)';
             Cpi2 = Cp(i2)';
-            idxzr = abs(Cpi1+Cpi2) < tol & sum(abs(Api1+Api2),1) < tol;
-            if any(idxzr)
+            if ~isempty(i1)
+                idxzr = find(abs(Cpi1+Cpi2) < tol & sum(abs(Api1+Api2),1) < tol);
+            else
+                idxzr = [];
+            end
+            if ~isempty(idxzr)
                 i1 = i1(idxzr');
                 i2 = i2(idxzr');
                 blk2{p,1} = 'u';

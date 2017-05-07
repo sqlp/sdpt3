@@ -5,9 +5,7 @@
 %%   s.t   Bk'*P + P*Bk <= 0, k = 1:L
 %%            P <= I,   
 %%         P >= t*I,  P = P'.
-%%
 %%------------------------------------------------------
-%%
 %%  [blk,Avec,C,b,X0,y0,Z0,objval,P] = control(B,solve), 
 %%
 %%  where B{k} = Bk,  k = 1:L. 
@@ -22,12 +20,12 @@
 %%
 %% solve = 0 just to initialize
 %%       = 1 if want to solve the problem
-%%
-%% SDPT3: version 3.0 
+%%*****************************************************************
+%% SDPT3: version 4.0
 %% Copyright (c) 1997 by
-%% K.C. Toh, M.J. Todd, R.H. Tutuncu
-%% Last modified: 2 Feb 01
-%%******************************************************
+%% Kim-Chuan Toh, Michael J. Todd, Reha H. Tutuncu
+%% Last Modified: 16 Sep 2004
+%%*****************************************************************
 
   function [blk,Avec,C,b,X0,y0,Z0,objval,P] = control(B,solve); 
 

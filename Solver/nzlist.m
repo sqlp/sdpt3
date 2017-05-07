@@ -25,12 +25,12 @@
 %%            Ap,1+.... Ap,m.
 %%            nzlistAy{p} = inf  if the number of nonzero elements
 %%            exceeds a given threshold.
-%%
-%% SDPT3: version 3.1
+%%*****************************************************************
+%% SDPT3: version 4.0
 %% Copyright (c) 1997 by
-%% K.C. Toh, M.J. Todd, R.H. Tutuncu
+%% Kim-Chuan Toh, Michael J. Todd, Reha H. Tutuncu
 %% Last Modified: 16 Sep 2004
-%%***********************************************************************
+%%*****************************************************************
 
 function [isspA,nzlistA,nzlistAsum,isspAy,nzlistAy] = nzlist(blk,At,par)
 

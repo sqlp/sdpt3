@@ -47,6 +47,8 @@
 %% get parameters from the OPTIONS structure 
 %%-----------------------------------------
 %%
+   % MCG we can't be global and unreversible here. See HSDsqlpmain.m
+   % warning off; 
    if (nargin < 5); OPTIONS = []; end
    
    matlabversion = sscanf(version,'%f');

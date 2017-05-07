@@ -7,6 +7,9 @@
 
 #include "mex.h"
 #include <math.h>
+#include <string.h>
+#include "matrix.h"
+#include "header.h"
 
 /********************************************************************
   PROCEDURE mexFunction - Entry for Matlab
@@ -17,23 +20,32 @@ void mexFunction(const int nlhs, mxArray *plhs[],
   double   *X, *Y, *Ytmp;
   mwIndex  *irX, *jcX, *irY, *jcY; 
   int       n, isspX, isspY, j, jn, k, kstart, kend, r, kstart2, kend2; 
-  int       options, scalarY; 
+  int       options, scalarY, nzmax; 
   double    tmp, tmp2, alpha;
 
   if(nrhs < 2)
     mexErrMsgTxt("mexschurfun: requires at least 2 input arguments.");
-  if(nlhs > 0)
-    mexErrMsgTxt("mexschurfun: requires no output argument.");
+  if(nlhs != 1)
+    mexErrMsgTxt("mexschurfun: requires 1 output argument.");
 
-  X = mxGetPr(prhs[0]);
   isspX = mxIsSparse(prhs[0]); 
-  if (isspX) {
-     irX = mxGetIr(prhs[0]);
-     jcX = mxGetJc(prhs[0]);
-  }
-  n = mxGetM(prhs[0]); 
+  n = mxGetM(prhs[0]);   
   if (n != mxGetN(prhs[0])) {
-     mexErrMsgTxt("X should be square."); }
+     mexErrMsgTxt("X should be square."); }  
+  if (isspX) {
+     nzmax = mxGetNzmax(prhs[0]);
+     plhs[0] = mxCreateSparse(n,n,nzmax,mxREAL);   
+     X = mxGetPr(plhs[0]);
+     irX = mxGetIr(plhs[0]);
+     jcX = mxGetJc(plhs[0]);     
+     memcpy(X,mxGetPr(prhs[0]),nzmax*sizeof(double)); 
+     memcpy(irX,mxGetIr(prhs[0]),nzmax*sizeof(mwSize)); 
+     memcpy(jcX,mxGetJc(prhs[0]),(n+1)*sizeof(mwSize));
+  } else {
+    plhs[0] = mxCreateDoubleMatrix(n,n,mxREAL);
+    X = mxGetPr(plhs[0]);    
+    memcpy(X,mxGetPr(prhs[0]),(n*n)*sizeof(double)); 
+  }
   isspY = mxIsSparse(prhs[1]);
   Y = mxGetPr(prhs[1]);  
   if (isspY) {
@@ -72,10 +84,10 @@ void mexFunction(const int nlhs, mxArray *plhs[],
         for (j=0; j<n; j++) {
            kstart = jcX[j]; kend = jcX[j+1]; 
            for (k=kstart; k<kend; k++) { 
-	      r = irX[k];
+	          r = irX[k];
               if (r==j) { X[k] += Ytmp[j]; break; } 
-	   }
-	}
+           }
+        }
       } else { 
         for (j=0; j<n; j++) { jn = j*n; X[j+jn] += Ytmp[j]; }
       }
@@ -85,60 +97,60 @@ void mexFunction(const int nlhs, mxArray *plhs[],
            for (j=0; j<n; j++) {
               kstart = jcX[j]; kend = jcX[j+1]; 
               for (k=kstart; k<kend; k++) { 
-	         r = irX[k];
+	             r = irX[k];
                  X[k] += alpha; }
-	   }
+           }
         } else { 
            for (j=0; j<n; j++) { 
               jn = j*n;
               for (k=0; k<n; k++) { X[k+jn] += alpha; }
-	   }
-	}
+           }
+        }
      } else {
         if (isspX & !isspY) {
            for (j=0; j<n; j++) {
-	      kstart = jcX[j]; kend = jcX[j+1]; jn = j*n; 
+	          kstart = jcX[j]; kend = jcX[j+1]; jn = j*n; 
               for (k=kstart; k<kend; k++) { 
-	         r = irX[k];
+	             r = irX[k];
                  X[k] += Y[r+jn]; }
-	   }
+           }
         } else if (!isspX & !isspY) { 
            for (j=0; j<n; j++) { 
               jn = j*n;
               for (k=0; k<n; k++) { X[k+jn] += Y[k+jn]; }
-	   }
-	} else if (!isspX & isspY) { 
+           }
+        } else if (!isspX & isspY) { 
            for (j=0; j<n; j++) {
-	      kstart = jcY[j]; kend = jcY[j+1]; jn = j*n; 
+	          kstart = jcY[j]; kend = jcY[j+1]; jn = j*n; 
               for (k=kstart; k<kend; k++) { 
-	         r = irY[k];
+	             r = irY[k];
                  X[r+jn] += Y[k]; }
-	   }
-	} else {
+           }
+        } else {
           for (j=0; j<n; j++) {
-	      kstart2 = jcY[j]; kend2 = jcY[j+1]; 
+	          kstart2 = jcY[j]; kend2 = jcY[j+1]; 
               for (k=kstart2; k<kend2; ++k) { r=irY[k]; Ytmp[r]=Y[k]; }  
-	      kstart = jcX[j]; kend = jcX[j+1];  
+	          kstart = jcX[j]; kend = jcX[j+1];  
               for (k=kstart; k<kend; k++) { 
-	         r = irX[k];
+	             r = irX[k];
                  X[k] += Ytmp[r]; }
               for (k=kstart2; k<kend2; ++k) { r=irY[k]; Ytmp[r]=0.0; }  
-	   }
-	}
+          }
+        }
      }     
   } else if (options==3) {
      if (isspX) { 
         for (j=0; j<n; j++) {
-	   kstart = jcX[j]; kend = jcX[j+1]; jn = j*n; 
+	       kstart = jcX[j]; kend = jcX[j+1]; jn = j*n; 
            for (k=kstart; k<kend; k++) { 
-	      r = irX[k];
+	          r = irX[k];
               X[k] *= Y[r]*Y[j]; }
-	}
+        }
      } else {
         for (j=0; j<n; j++) { 
            jn = j*n;
            for (k=0; k<n; k++) { X[k+jn] *= Y[k]*Y[j]; }
-	}
+        }
      }   
   }
   mxFree(Ytmp); 

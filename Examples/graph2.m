@@ -11,7 +11,7 @@
 %% Last modified: 2 Feb 01
 %%******************************************************
 
-   function B = graph(n,prob);
+   function B = graph(n,prob)
 
    B = zeros(n,n);
    if nargin <= 1; prob = 0.5; end;

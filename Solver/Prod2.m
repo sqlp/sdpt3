@@ -8,12 +8,12 @@
 %%
 %%   options = 0  if no special structure
 %%             1  if C is symmetric
-%%
-%% SDPT3: version 3.1
+%%*****************************************************************
+%% SDPT3: version 4.0
 %% Copyright (c) 1997 by
-%% K.C. Toh, M.J. Todd, R.H. Tutuncu
+%% Kim-Chuan Toh, Michael J. Todd, Reha H. Tutuncu
 %% Last Modified: 16 Sep 2004
-%%*******************************************************************
+%%*****************************************************************
 
 function  C = Prod2(blk,A,B,options)
 

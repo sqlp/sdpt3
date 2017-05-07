@@ -1,12 +1,11 @@
-%%*************************************************************************
+%%*****************************************************************
 %% sqlp: main solver
-%%
-%%*************************************************************************
-%% SDPT3: version 3.1
+%%*****************************************************************
+%% SDPT3: version 4.0
 %% Copyright (c) 1997 by
-%% K.C. Toh, M.J. Todd, R.H. Tutuncu
+%% Kim-Chuan Toh, Michael J. Todd, Reha H. Tutuncu
 %% Last Modified: 16 Sep 2004
-%%*************************************************************************
+%%*****************************************************************
 
 function [obj,X,y,Z,info,runhist] = sqlpmain(blk,At,C,b,par,parbarrier,X0,y0,Z0)
 
@@ -22,11 +21,14 @@ else
   w1 = warning('off','MATLAB:nearlySingularMatrix');
   w2 = warning('off','MATLAB:singularMatrix');
 end
+randstate = rand('state');  randnstate = randn('state'); %#ok
+rand('state',0);  randn('state',0); %#ok
 vers          = par.vers;
 predcorr      = par.predcorr;
 gam           = par.gam;
 expon         = par.expon;
-gaptol        = par.gaptol + ( par.gaptol == 0 );
+   gaptol        = par.gaptol;
+   inftol        = par.inftol;
 steptol       = par.steptol;
 maxit         = par.maxit;
 printlevel    = par.printlevel;
@@ -219,7 +221,12 @@ normX = ops(X,'norm');
 %%
 termcode = 0; restart = 0;
 pstep = 1; dstep = 1; pred_convg_rate = 1; corr_convg_rate = 1;
-besttol = max( relgap, infeas );
+prim_infeas_min  = prim_infeas; %#ok
+dual_infeas_min  = dual_infeas; %#ok 
+prim_infeas_best = prim_infeas; 
+dual_infeas_best = dual_infeas; 
+infeas_best = infeas; 
+relgap_best = relgap; 
 homRd = inf; homrp = inf; dy = zeros(length(b),1);
 msg = []; msg2 = []; msg3 = [];
 runhist.pobj    = obj(1);
@@ -283,8 +290,8 @@ param.prim_infeas_bad = 0;
 param.dual_infeas_bad = 0;
 param.prim_infeas_min = prim_infeas;
 param.dual_infeas_min = dual_infeas;
-param.gaptol      = par.gaptol;
-param.inftol      = par.inftol;
+   param.gaptol      = gaptol;
+   param.inftol      = inftol; 
 param.maxit       = maxit;
 param.scale_data  = scale_data;
 param.printlevel  = printlevel;
@@ -705,13 +712,20 @@ for iter = 1:maxit;
     %%--------------------------------------------------
     %% check for break
     %%--------------------------------------------------    
-    newtol = max(relgap,infeas);
-    update_best(iter+1) = ~( newtol >= besttol ); %#ok
-    if update_best(iter+1),
+    if ((prim_infeas < 1.5*prim_infeas_best) ...
+        || (max(relgap,infeas) < 0.8*max(relgap_best,infeas_best))) ...
+        && (max(relgap,dual_infeas) < 0.8*max(relgap_best,dual_infeas_best))
         Xbest = X; ybest = y; Zbest = Z;
-        besttol = newtol;
+        prim_infeas_best = prim_infeas;
+        dual_infeas_best = dual_infeas;
+        relgap_best = relgap; infeas_best = infeas;
+        update_best(iter+1) = 1; %#ok
+        %%fprintf('#')
+    else
+        update_best(iter+1) = 0; %#ok
     end
-    if besttol < 1e-4 && ~any(update_best(max(1,iter-1):iter+1))
+    if (max(relgap_best,infeas_best) < 1e-4 ...
+            && norm(update_best(max(1,iter-1):iter+1)) == 0)
         msg = 'lack of progress in infeas';
         if (printlevel); fprintf('\n  %s',msg); end
         termcode = -9;
@@ -808,11 +822,13 @@ info.normA    = normA2;
 info.msg1     = msg;
 info.msg2     = msg2;
 info.msg3     = msg3;
-sqlpsummary(info,ttime,infeas_org,printlevel);
 if isoctave,
   warning(w1.state,w1.identifier);
 else
   warning(w2.state,w2.identifier);
   warning(w1.state,w1.identifier);
 end
+sqlpsummary(info,ttime,infeas_org,printlevel);
+rand('state',randstate); %#ok
+randn('state',randnstate); %#ok
 %%*****************************************************************************

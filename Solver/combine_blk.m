@@ -1,15 +1,15 @@
-%%*******************************************************************
+%%******************************************************************
 %% combine_blk: combine small SDP blocks together,
 %%              combine all SOCP blocks together, etc
 %%
 %% [blk2,At2,C2,blkinfo] = combine_blk(blk,At,C);
 %%
-%%
-%% SDPT3: version 3.1
+%%*****************************************************************
+%% SDPT3: version 4.0
 %% Copyright (c) 1997 by
 %% K.C. Toh, M.J. Todd, R.H. Tutuncu
 %% Last Modified: 16 Sep 2004
-%%*******************************************************************
+%%*****************************************************************
 
 function [blk2,At2,C2,blkinfo] = combine_blk(blk,At,C)
 

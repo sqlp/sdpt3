@@ -1,4 +1,4 @@
-%%*********************************************************
+%%*****************************************************************
 %% convertcmpsdp: convert SDP with complex data into one
 %%                with real data by converting
 %%
@@ -10,8 +10,12 @@
 %%  ykI = 0 for k = 1:m
 %%
 %% [bblk,AAt,CC,bb] = convertcmpsdp(blk,A,C,b);
-%%
-%%*********************************************************
+%%*****************************************************************
+%% SDPT3: version 4.0
+%% Copyright (c) 1997 by
+%% K.C. Toh, M.J. Todd, R.H. Tutuncu
+%% Last Modified: 16 Sep 2004
+%%*****************************************************************
 
 function [bblk,AAt,CC,bb,iscmp] = convertcmpsdp(blk,A,C,b)
 

@@ -3,7 +3,12 @@
 %% [-v(p)*logdet(X{p}),   v(p)*logdet(Z{p}) + n*v(p)*(1-log(v(p)))]
 %% [-v(p)*log(gam(X{p})), v(p)*log(gam(Z{p})) + v(p)]
 %% [-v(p)*log(X{p}),      v(p)*log(Z{p}) + n*v(p)*(1-log(v(p)))]
-%%********************************************************************
+%%*****************************************************************
+%% SDPT3: version 4.0
+%% Copyright (c) 1997 by
+%% K.C. Toh, M.J. Todd, R.H. Tutuncu
+%% Last Modified: 16 Sep 2004
+%%*****************************************************************
 
 function objadd = blkbarrier(blk,X,Z,Xchol,Zchol,v)
 

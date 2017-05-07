@@ -10,8 +10,10 @@
 *   
 *********************************************************************/
 
-#include <mex.h>
+#include "mex.h"
 #include <math.h>
+#include "matrix.h"
+#include "header.h"
 
 /*************************************************************
   bwsolve2: solve Ux = b for x by backward substitutions. 
