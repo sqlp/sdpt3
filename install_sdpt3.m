@@ -66,12 +66,12 @@ if ~need_rebuild,
     elseif sum(nfound) < length(targets64),
         fprintf( 'incomplete set found.\n' );
         disp( line );
-        disp( 'Some of the binaries for this platform were found, but some' );
-        disp( 'were missing as well. This may mean your download was corrupt;' );
-        disp( 'consider downloading and unpacking SDPT3 again. Otherwise, to' );
-        disp( 'try rebuilding the MEX files yourself, run this command:' );
-        disp( '    install_sdpt3 -rebuild' );
-        fprintf( '%s\n\n', line );
+        warning(['Some of the binaries for this platform were found, but some', char(10), ...
+                 'were missing as well. This may mean your download was corrupt;', char(10), ...
+                 'consider downloading and unpacking SDPT3 again. Otherwise, to', char(10), ...
+                 'try rebuilding the MEX files yourself, run this command:', char(10), ...
+                 '    install_sdpt3 -rebuild', char(10), ...
+                 line, char(10), char(10)]);
         return;
     else
         fprintf( 'found!\n' );
@@ -156,8 +156,8 @@ end
 
 if ~any(nfound),
     disp( line );
-    disp( 'SDPT3 was not successfully installed.' );
-    disp( 'Please attempt to correct the errors and try again.' );
+    error(['SDPT3 was not successfully installed.', char(10), ...
+    	   'Please attempt to correct the errors and try again.']);
 elseif ~no_path,
     disp( line );
     fprintf( 'Adding SDPT3 to the %s path:\n', prog );
