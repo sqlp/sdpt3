@@ -444,7 +444,7 @@ void mexFunction(int nlhs,   mxArray  *plhs[],
 	}
         for (row=0; row<=col; row++) {
 	    if (schurcol[row] != 0) {
-	       if (count<nzP && nlhs==2) { jcP[col+1]=count+1; irP[count]=row; P[count]=1; }
+	       if (nlhs==2 && count<nzP) { jcP[col+1]=count+1; irP[count]=row; P[count]=1; }
 	       count++; 
    	       idx1 = permA[row]+colm[col]; 
                idx2 = permA[col]+colm[row]; 
