@@ -43,7 +43,7 @@ void  mat1(int n,
           jcB[j+1] = count; 
       }   
    } else if (isspA && !isspB) {
-      j2 = 0; idxj = 0; 
+      i = 0; j2 = 0; idxj = 0; 
       kstart = jcA[colidx];  kend = jcA[colidx+1]; 
       for (k=kstart; k<kend; k++) { 
           r = irA[k];
@@ -52,7 +52,7 @@ void  mat1(int n,
       }
    } else if (isspA && isspB) {
       count = 0; 
-      j2 = 0; idxj = 0; 
+      i = 0; j2 = 0; idxj = 0; 
       kstart = jcA[colidx];  kend = jcA[colidx+1]; 
       for (k=kstart; k<kend; k++) { 
           r = irA[k];
@@ -101,7 +101,7 @@ void  mat1cmp(int n,
           jcB[j+1] = count; 
       }   
    } else if (isspA && !isspB) {
-      j2 = 0; idxj = 0; 
+      i = 0; j2 = 0; idxj = 0; 
       kstart = jcA[colidx];  kend = jcA[colidx+1]; 
       for (k=kstart; k<kend; k++) { 
           r = irA[k];
@@ -111,7 +111,7 @@ void  mat1cmp(int n,
       }
    } else if (isspA && isspB) {
       count = 0; 
-      j2 = 0; idxj = 0; 
+      i = 0; j2 = 0; idxj = 0; 
       kstart = jcA[colidx];  kend = jcA[colidx+1]; 
       for (k=kstart; k<kend; k++) { 
           r = irA[k];
@@ -133,9 +133,8 @@ void  mat2(int n, int numblk, int *cumblksize, int *blknnz,
            double *A, int mA, int colidx,  
            double *B, mwIndex *irB, mwIndex *jcB, int isspB)
 
-{  int idx, i, j, r, jn, k, kstart, kend, idxj, j2, count;
-   int t, t2, istart, jstart, jend, rowidx, nsub; 
-   double tmp;  
+{  int idx, i, j, idxj;
+   int t, istart, jstart, jend, rowidx, nsub; 
 
       idx = 0; 
       jstart = 0; jend = 0; jcB[0]=0;  
@@ -164,9 +163,8 @@ void  mat2cmp(int n, int numblk, int *cumblksize, int *blknnz,
            double *B, mwIndex *irB, mwIndex *jcB, int isspB,
            double *AI, double *BI)
 
-{  int idx, i, j, r, jn, k, kstart, kend, idxj, j2, count;
-   int t, t2, istart, jstart, jend, rowidx, nsub; 
-   double tmp;  
+{  int idx, i, j, idxj;
+   int t, istart, jstart, jend, rowidx, nsub; 
 
       idx = 0; 
       jstart = 0; jend = 0; jcB[0]=0;  
@@ -201,13 +199,15 @@ void mexFunction(int nlhs, mxArray  *plhs[],
      double   *A, *B, *AI, *BI, *blksize, *Atmp, *AItmp;
      mwIndex  *irA, *jcA, *irB, *jcB;
      int      *cumblksize, *blknnz;
-     int       iscellA, mblk, mA, nA, m1, n1, rowidx, colidx, isspA, isspB;
-     int       iscmpA, iscmpB; 
+     int       iscellA, mA, m1, n1, rowidx, colidx, isspA, isspB;
+     int       iscmpA; 
 
      mwIndex  subs[2];
      mwSize   nsubs=2; 
      int      n, n2, k, nsub, index, numblk, NZmax, r, kstart, kend;
 
+     jcB=0; irB=0; AItmp=0; jcA=0; irA=0;
+     
 /* CHECK FOR PROPER NUMBER OF ARGUMENTS */
 
      if (nrhs < 2){
@@ -218,8 +218,8 @@ void mexFunction(int nlhs, mxArray  *plhs[],
 /* CHECK THE DIMENSIONS */
 
      iscellA = mxIsCell(prhs[1]); 
-     if (iscellA) { mA = mxGetM(prhs[1]); nA = mxGetN(prhs[1]); }
-     else         { mA = 1; nA = 1; }
+     if (iscellA) { mA = mxGetM(prhs[1]); }
+     else         { mA = 1; }
      if (mxGetM(prhs[0]) != mA) {
          mexErrMsgTxt("mexsmat: blk and Avec not compatible"); }
 

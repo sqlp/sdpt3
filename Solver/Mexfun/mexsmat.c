@@ -58,7 +58,7 @@ void smat1(int n, const double ir2,
    double tmp;  
    double hf=0.5; 
    
-   if (!isspA & !isspB) { 
+   if (!isspA && !isspB) { 
       idx = colidx*mA; 
       for (j=0; j<n; j++) { 
           jn = j*n; 
@@ -68,8 +68,8 @@ void smat1(int n, const double ir2,
           B[j+jn] = A[idx];
           idx++; 
       }
-   } else if (isspA & !isspB) {      
-      j2 = 0; idxj = 0; 
+   } else if (isspA && !isspB) {      
+      i = 0; j2 = 0; idxj = 0; 
       kstart = jcA[colidx];  kend = jcA[colidx+1]; 
       for (k=kstart; k<kend; k++) { 
           r = irA[k];
@@ -77,7 +77,7 @@ void smat1(int n, const double ir2,
           if (i < j) { B[i+j*n] = ir2*A[k]; }
           else       { B[i+j*n] = A[k]; }
       }
-   } else if (!isspA & isspB) { 
+   } else if (!isspA && isspB) { 
       idx = colidx*mA; 
       count = 0; 
       for (j=0; j<n; j++) { 
@@ -91,9 +91,9 @@ void smat1(int n, const double ir2,
           idx++; 
           jcB[j+1] = count; 
       }   
-   } else if (isspA & isspB) { 
+   } else if (isspA && isspB) { 
       count = 0; 
-      j2 = 0; idxj = 0; 
+      i = 0; j2 = 0; idxj = 0; 
       kstart = jcA[colidx];  kend = jcA[colidx+1]; 
       for (k=kstart; k<kend; k++) { 
           r = irA[k];
@@ -118,9 +118,8 @@ void smat2(int n, const int numblk, const int *cumblksize, const int *blknnz,
            int mA, int colidx, 
            double *B, mwIndex *irB, mwIndex *jcB, int isspB)
 
-{  int idx, i, j, r, jn, k, kstart, kend, idxj, j2, count;
+{  int idx, i, j, r, k, kstart, kend, idxj, j2, count;
    int t, t2, istart, jstart, jend, rowidx; 
-   double tmp;  
    double hf=0.5; 
 
    if (!isspA) { 
@@ -143,7 +142,7 @@ void smat2(int n, const int numblk, const int *cumblksize, const int *blknnz,
    } else {
       jstart = 0; jend = cumblksize[1]; t2 = 0; 
       kstart = jcA[colidx]; kend = jcA[colidx+1]; 
-      count  = 0; j2 = 0; idxj = 0; 
+      i = 0; count  = 0; j2 = 0; idxj = 0; 
       for (k=kstart; k<kend; k++) { 
           r = irA[k];
           for (t=t2; t<numblk; t++) { if (r-blknnz[t+1]<0) {break;} } 
@@ -179,7 +178,7 @@ void smat1cmp(int n, const double ir2,
    double tmp, tmp2;  
    double hf=0.5; 
    
-   if (!isspA & !isspB) { 
+   if (!isspA && !isspB) { 
       idx = colidx*mA; 
       for (j=0; j<n; j++) { 
           jn = j*n; 
@@ -191,8 +190,8 @@ void smat1cmp(int n, const double ir2,
           BI[j+jn] = AI[idx];
           idx++; 
       }
-   } else if (isspA & !isspB) {      
-      j2 = 0; idxj = 0; 
+   } else if (isspA && !isspB) {      
+      i = 0; j2 = 0; idxj = 0; 
       kstart = jcA[colidx];  kend = jcA[colidx+1]; 
       for (k=kstart; k<kend; k++) { 
           r = irA[k];
@@ -200,7 +199,7 @@ void smat1cmp(int n, const double ir2,
           if (i < j) { ind = i+j*n; B[ind] = ir2*A[k]; BI[ind] = ir2*AI[k]; }
           else       { ind = i+j*n; B[ind] = A[k];     BI[ind] = AI[k];}
       }
-   } else if (!isspA & isspB) { 
+   } else if (!isspA && isspB) { 
       idx = colidx*mA; 
       count = 0; 
       for (j=0; j<n; j++) { 
@@ -221,9 +220,9 @@ void smat1cmp(int n, const double ir2,
           idx++; 
           jcB[j+1] = count; 
       }   
-   } else if (isspA & isspB) { 
+   } else if (isspA && isspB) { 
       count = 0; 
-      j2 = 0; idxj = 0; 
+      i = 0; j2 = 0; idxj = 0; 
       kstart = jcA[colidx];  kend = jcA[colidx+1]; 
       for (k=kstart; k<kend; k++) { 
           r = irA[k];
@@ -254,9 +253,8 @@ void smat2cmp(int n, const int numblk, const int *cumblksize, const int *blknnz,
            double *B, mwIndex *irB, mwIndex *jcB, int isspB,
            double *AI, double *BI)
 
-{  int  idx, i, j, r, jn, k, kstart, kend, idxj, j2, count;
+{  int  idx, i, j, r, k, kstart, kend, idxj, j2, count;
    int  t, t2, istart, jstart, jend, rowidx; 
-   double tmp;  
    double hf=0.5; 
 
    if (!isspA) { 
@@ -284,7 +282,7 @@ void smat2cmp(int n, const int numblk, const int *cumblksize, const int *blknnz,
    } else {
       jstart = 0; jend = cumblksize[1]; t2 = 0; 
       kstart = jcA[colidx]; kend = jcA[colidx+1]; 
-      count  = 0; j2 = 0; idxj = 0; 
+      i = 0; count  = 0; j2 = 0; idxj = 0; 
       for (k=kstart; k<kend; k++) { 
           r = irA[k];
           for (t=t2; t<numblk; t++) { if (r-blknnz[t+1]<0) {break;} } 
@@ -320,7 +318,7 @@ void mexFunction(int nlhs,   mxArray  *plhs[],
      double   *A,  *B,  *blksize, *AI, *BI;
      mwIndex  *irA, *jcA, *irB, *jcB;
      int      *cumblksize, *blknnz;
-     int       mblk, mA, nA, m1, n1, rowidx, colidx, isspA, isspB;
+     int       mA, m1, n1, rowidx, colidx, isspA, isspB;
      int       iscellA, iscmpA; 
 
      mwIndex  subs[2];
@@ -328,6 +326,8 @@ void mexFunction(int nlhs,   mxArray  *plhs[],
      int      n, n2, k, nsub, index, numblk, NZmax;
      double   ir2=1/sqrt(2); 
 
+     irA=0; jcA=0; irB=0; jcB=0;
+     
 /* CHECK FOR PROPER NUMBER OF ARGUMENTS */
 
      if (nrhs < 2){
@@ -338,8 +338,8 @@ void mexFunction(int nlhs,   mxArray  *plhs[],
 /* CHECK THE DIMENSIONS */
 
      iscellA = mxIsCell(prhs[1]); 
-     if (iscellA) { mA = mxGetM(prhs[1]); nA = mxGetN(prhs[1]); }
-     else         { mA = 1; nA = 1; }
+     if (iscellA) { mA = mxGetM(prhs[1]); }
+     else         { mA = 1; }
      if (mxGetM(prhs[0]) != mA) {
          mexErrMsgTxt("mexsmat: blk and Avec not compatible"); }
 

@@ -59,7 +59,7 @@ void symmetrize(double *P, int n)
 void product(double *A, double *B, double *P, 
              int m, int n, int p, int type)
 
-{  int  i, j, k, jm, jn, km, kstart, kend;
+{  int  j, k, jm, jn, km, kstart, kend;
    int     istart, iend;
    double  tmp; 
 
@@ -84,7 +84,7 @@ void product(double *A, double *B, double *P,
 void product2(double *A, double *B, mwIndex *irB, mwIndex *jcB, 
               double *P, int m, int n, int p, int type)
 
-{  int  i, j, k, r, kstart, kend, istart, iend, jm, rm;
+{  int  j, k, r, kstart, kend, istart, iend, jm, rm;
    double  tmp;
     
       for (j=0; j<p; j++){
@@ -144,6 +144,8 @@ void product4(double *A, mwIndex *irA, mwIndex *jcA,
    int  idx;
    double  tmp; 
 
+     jend=0;
+     
      idx = 0;  jcP[0]=0;
      for (l=0; l<numblk; l++) { 
         jstart = cumblk[l]; jend = cumblk[l+1];
@@ -222,10 +224,12 @@ void mexFunction(int nlhs,  mxArray        *plhs[],
    mwIndex  *irA, *jcA, *irB, *jcB, *irP, *jcP;
    int      *cumblk;
    int       isspA, isspB, m1, n1, m2, n2;
-   int       type, index, numblk, NZmax, cols, i, l;
+   int       type, index, numblk, NZmax, cols, l;
    mwIndex   subs[2];
    mwSize    nsubs=2;
 
+   jcB=0; irB=0; jcA=0; irA=0;
+   
 /* Check for proper number of arguments */
    if (nrhs<3){
       mexErrMsgTxt("mexProd2: requires at least 3 input arguments."); }

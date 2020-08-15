@@ -28,7 +28,7 @@ void svec1(int n, double r2,
 
 {  int idx, i, j, jn, k, kstart, kend, idxj; 
    
-   if (!isspB & !isspA) { 
+   if (!isspB && !isspA) { 
       idx = 0; 
       for (j=0; j<n; j++) { 
           jn = j*n; 
@@ -38,7 +38,7 @@ void svec1(int n, double r2,
           B[idx] = A[j+jn]; 
           idx++; 
       }
-   } else if (isspB & !isspA) { 
+   } else if (isspB && !isspA) { 
       idx = 0; 
       idxj = 0; 
       for (j=0; j<n; j++) { 
@@ -53,7 +53,7 @@ void svec1(int n, double r2,
           idx++; 
       }  
       jcB[1] = idx;  
-   } else if (!isspB & isspA) {
+   } else if (!isspB && isspA) {
       idx = 0; 
       for (j=0; j<n; j++) { 
           idx += j; 
@@ -67,7 +67,7 @@ void svec1(int n, double r2,
              if (i == j) {  B[idx+i] = A[k]; }        
 	  }
       }
-   } else if (isspB & isspA) {
+   } else if (isspB && isspA) {
       idx = 0; 
       idxj = 0; 
       for (j=0; j<n; j++) { 
@@ -102,7 +102,7 @@ void svec2(int n, int numblk, int *cumblksize, int *blknnz,
 {  int idx, i, j, jn, l, jstart, jend, istart;
    int rowidx, idxj, k, kstart, kend; 
    
-   if (!isspB & !isspA) { 
+   if (!isspB && !isspA) { 
       idx = 0; 
       jstart = 0; jend = 0; 
       for (l=0; l<numblk; l++) { 
@@ -117,7 +117,7 @@ void svec2(int n, int numblk, int *cumblksize, int *blknnz,
               idx++;    }
           jstart = jend; 
       }
-   } else if (isspB & !isspA) { 
+   } else if (isspB && !isspA) { 
       idx = 0; 
       jstart = 0; jend = 0; 
       for (l=0; l<numblk; l++) { 
@@ -139,7 +139,7 @@ void svec2(int n, int numblk, int *cumblksize, int *blknnz,
           jstart = jend; 
       }  
       jcB[1] = idx;  
-   } else if (!isspB & isspA) { 
+   } else if (!isspB && isspA) { 
       jstart = 0; jend = 0; 
       for (l=0; l<numblk; l++) { 
   	  jend = cumblksize[l+1];  
@@ -159,7 +159,7 @@ void svec2(int n, int numblk, int *cumblksize, int *blknnz,
           }
           jstart = jend; 
       }  
-   } else if (isspB & isspA) {
+   } else if (isspB && isspA) {
       idx = 0; 
       jstart = 0; jend = 0; 
       for (l=0; l<numblk; l++) { 
@@ -197,9 +197,9 @@ void svec3(int n, double r2,
            double *A, mwIndex *irA, mwIndex *jcA, int isspA, 
            double *B, mwIndex *irB, mwIndex *jcB, int isspB) 
 
-{  int idx, rowidx, i, j, jn, k, kstart, kend; 
+{  int idx, rowidx, i, j, k, kstart, kend; 
    
-   if (!isspB & !isspA) { 
+   if (!isspB && !isspA) { 
       idx = 0; 
       for (i=0; i<n; i++) { 
           for (j=0; j<i; j++) { 
@@ -208,7 +208,7 @@ void svec3(int n, double r2,
           B[idx] = A[j+j*n]; 
           idx++; 
       }
-   } else if (isspB & !isspA) { 
+   } else if (isspB && !isspA) { 
       idx = 0; 
       rowidx = 0; 
       for (i=0; i<n; i++) { 
@@ -222,7 +222,7 @@ void svec3(int n, double r2,
           idx++; 
       }  
       jcB[1] = idx;  
-   } else if (!isspB & isspA) {
+   } else if (!isspB && isspA) {
       for (j=0; j<n; j++) { 
           kstart = jcA[j]; kend = jcA[j+1]; 
           for (k=kstart; k<kend; k++) { 
@@ -235,7 +235,7 @@ void svec3(int n, double r2,
 		  B[j+idx] = A[k]; }        
 	  }
       }
-   } else if (isspB & isspA) {
+   } else if (isspB && isspA) {
       idx = 0; 
       for (j=0; j<n; j++) { 
           kstart = jcA[j];  kend = jcA[j+1];
@@ -326,7 +326,7 @@ void svec1cmp(int n, double r2,
 
 {  int idx, i, j, jn, k, kstart, kend, idxj; 
    
-   if (!isspB & !isspA) { 
+   if (!isspB && !isspA) { 
       idx = 0; 
       for (j=0; j<n; j++) { 
           jn = j*n; 
@@ -338,7 +338,7 @@ void svec1cmp(int n, double r2,
           BI[idx] = AI[j+jn]; 
           idx++; 
       }
-   } else if (isspB & !isspA) { 
+   } else if (isspB && !isspA) { 
       idx = 0; 
       idxj = 0; 
       for (j=0; j<n; j++) { 
@@ -355,7 +355,7 @@ void svec1cmp(int n, double r2,
           idx++; 
       }  
       jcB[1] = idx;  
-   } else if (!isspB & isspA) {
+   } else if (!isspB && isspA) {
       idx = 0; 
       for (j=0; j<n; j++) { 
           idx += j; 
@@ -370,7 +370,7 @@ void svec1cmp(int n, double r2,
              if (i == j) {  B[idx+i] = A[k]; BI[idx+i] = AI[k];}        
 	  }
       }
-   } else if (isspB & isspA) {
+   } else if (isspB && isspA) {
       idx = 0; 
       idxj = 0; 
       for (j=0; j<n; j++) { 
@@ -409,7 +409,7 @@ void svec2cmp(int n, int numblk, int *cumblksize, int *blknnz,
 {  int idx, i, j, jn, l, jstart, jend, istart;
    int rowidx, idxj, k, kstart, kend; 
    
-   if (!isspB & !isspA) { 
+   if (!isspB && !isspA) { 
       idx = 0; 
       jstart = 0; jend = 0; 
       for (l=0; l<numblk; l++) { 
@@ -426,7 +426,7 @@ void svec2cmp(int n, int numblk, int *cumblksize, int *blknnz,
               idx++;    }
           jstart = jend; 
       }
-   } else if (isspB & !isspA) { 
+   } else if (isspB && !isspA) { 
       idx = 0; 
       jstart = 0; jend = 0; 
       for (l=0; l<numblk; l++) { 
@@ -450,7 +450,7 @@ void svec2cmp(int n, int numblk, int *cumblksize, int *blknnz,
           jstart = jend; 
       }  
       jcB[1] = idx;  
-   } else if (!isspB & isspA) { 
+   } else if (!isspB && isspA) { 
       jstart = 0; jend = 0; 
       for (l=0; l<numblk; l++) { 
   	  jend = cumblksize[l+1];  
@@ -471,7 +471,7 @@ void svec2cmp(int n, int numblk, int *cumblksize, int *blknnz,
           }
           jstart = jend; 
       }  
-   } else if (isspB & isspA) {
+   } else if (isspB && isspA) {
       idx = 0; 
       jstart = 0; jend = 0; 
       for (l=0; l<numblk; l++) { 
@@ -513,9 +513,9 @@ void svec3cmp(int n, double r2,
            double *B, mwIndex *irB, mwIndex *jcB, int isspB,
            double *AI, double *BI) 
 
-{  int idx, rowidx, i, j, jn, k, kstart, kend; 
+{  int idx, rowidx, i, j, k, kstart, kend; 
    
-   if (!isspB & !isspA) { 
+   if (!isspB && !isspA) { 
       idx = 0; 
       for (i=0; i<n; i++) { 
           for (j=0; j<i; j++) { 
@@ -526,7 +526,7 @@ void svec3cmp(int n, double r2,
           BI[idx] = AI[j+j*n]; 
           idx++; 
       }
-   } else if (isspB & !isspA) { 
+   } else if (isspB && !isspA) { 
       idx = 0; 
       rowidx = 0; 
       for (i=0; i<n; i++) { 
@@ -542,7 +542,7 @@ void svec3cmp(int n, double r2,
           idx++; 
       }  
       jcB[1] = idx;  
-   } else if (!isspB & isspA) {
+   } else if (!isspB && isspA) {
       for (j=0; j<n; j++) { 
           kstart = jcA[j]; kend = jcA[j+1]; 
           for (k=kstart; k<kend; k++) { 
@@ -558,7 +558,7 @@ void svec3cmp(int n, double r2,
 	       }        
 	  }
       }
-   } else if (isspB & isspA) {
+   } else if (isspB && isspA) {
       idx = 0; 
       for (j=0; j<n; j++) { 
           kstart = jcA[j];  kend = jcA[j+1];
@@ -595,6 +595,7 @@ void svec4cmp(int n, int numblk, int *cumblksize, int *blknnz,
 {  int idx, i, i1, j, l, jstart, jend, istart;
    int rowidx, idx2, idx3, k, kstart, kend; 
    
+   i1 = 0;
    if (!isspB) { 
       for (l=0; l<numblk; l++) { 
 	  jstart = cumblksize[l]; jend = cumblksize[l+1];  
@@ -664,6 +665,8 @@ void mexFunction(int nlhs, mxArray  *plhs[],
      int      m, n, n2, nsub, k, index, numblk, NZmax, type; 
      double   r2; 
 
+     irA=0; jcA=0; irB=0; jcB=0;
+     
 /* CHECK FOR PROPER NUMBER OF ARGUMENTS */
 
    if (nrhs < 2){
@@ -711,7 +714,7 @@ void mexFunction(int nlhs, mxArray  *plhs[],
        NZmax = n2; 
     }
     if (iscmpA) { AI = mxGetPi(prhs[1]); }
-    if ((numblk > 1) & (!isspA)) {
+    if ((numblk > 1) && (!isspA)) {
        mexErrMsgTxt("mexsvec: matrix must be sparse for numblk > 1"); }
     if (nrhs > 2) { 
        if (mxGetM(prhs[2])>1) { isspB = (int)*mxGetPr(prhs[2]); }

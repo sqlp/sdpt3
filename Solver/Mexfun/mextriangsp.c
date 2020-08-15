@@ -76,6 +76,8 @@ void fwsolve2(int n, double *U, mwIndex *irU, mwIndex *jcU,
    int         k, kend, options;   
    double     *x, *b, *btmp;
 
+   irU=0; jcU=0;
+   
    if (nrhs < 2) {
       mexErrMsgTxt("mextriangsp requires 2 input arguments."); }
    if (nlhs > 1) {

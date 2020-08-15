@@ -18,7 +18,9 @@ void mexFunction(const int nlhs, mxArray *plhs[],
   mwIndex  *irX, *jcX, *irY, *jcY; 
   int       n, isspX, isspY, j, jn, k, kstart, kend, r, kstart2, kend2; 
   int       options, scalarY; 
-  double    tmp, tmp2, alpha;
+  double    alpha;
+
+  alpha=0; scalarY=0; jcY=0; irY=0; jcX=0; irX=0;
 
   if(nrhs < 2)
     mexErrMsgTxt("mexschurfun: requires at least 2 input arguments.");
@@ -41,7 +43,7 @@ void mexFunction(const int nlhs, mxArray *plhs[],
      jcY = mxGetJc(prhs[1]);
   } 
   if (nrhs == 2) { 
-     if ((mxGetM(prhs[1]) == n) & (mxGetN(prhs[1]) == n)) {
+     if ((mxGetM(prhs[1]) == n) && (mxGetN(prhs[1]) == n)) {
        options = 2; 
      } else {
        options = 1; 
@@ -50,10 +52,10 @@ void mexFunction(const int nlhs, mxArray *plhs[],
      options = (int) (*mxGetPr(prhs[2])); 
   }
   if (options == 1 || options == 3) {
-     if ((mxGetN(prhs[1]) != 1) & (mxGetM(prhs[1]) != 1)) {
+     if ((mxGetN(prhs[1]) != 1) && (mxGetM(prhs[1]) != 1)) {
         mexErrMsgTxt("mexschurfun: Y should be a vector."); }
   } else {
-     if ((mxGetN(prhs[1]) == 1) & (mxGetM(prhs[1]) == 1)) {
+     if ((mxGetN(prhs[1]) == 1) && (mxGetM(prhs[1]) == 1)) {
 	scalarY = 1; 
         alpha = Y[0]; 
      } else {
@@ -95,19 +97,19 @@ void mexFunction(const int nlhs, mxArray *plhs[],
 	   }
 	}
      } else {
-        if (isspX & !isspY) {
+        if (isspX && !isspY) {
            for (j=0; j<n; j++) {
 	      kstart = jcX[j]; kend = jcX[j+1]; jn = j*n; 
               for (k=kstart; k<kend; k++) { 
 	         r = irX[k];
                  X[k] += Y[r+jn]; }
 	   }
-        } else if (!isspX & !isspY) { 
+        } else if (!isspX && !isspY) { 
            for (j=0; j<n; j++) { 
               jn = j*n;
               for (k=0; k<n; k++) { X[k+jn] += Y[k+jn]; }
 	   }
-	} else if (!isspX & isspY) { 
+	} else if (!isspX && isspY) { 
            for (j=0; j<n; j++) {
 	      kstart = jcY[j]; kend = jcY[j+1]; jn = j*n; 
               for (k=kstart; k<kend; k++) { 
