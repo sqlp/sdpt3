@@ -63,6 +63,7 @@ void  prod1(int m, int n, int p,
 { int  j, k, r, t, rn, jn, jold, kstart, kend, idx, count;
   double  tmp;  
 
+     jn = 0;
      jold = -1; count = 0; 
      for (t=0; t<len; ++t) {
          r = list1[t];
@@ -96,7 +97,7 @@ void  prod2(int m, int n, int p,
             double *P, mwIndex *irP, mwIndex *jcP, double *Btmp, 
             int *list1, int *list2, int len)  
 
-{ int  j, k, r, t, rn, jn, jold, kstart, kend, idx, count;
+{ int  j, k, r, t, rn, jold, kstart, kend, idx, count;
   double  tmp;  
 
      jold = -1; count = 0;  
@@ -104,7 +105,6 @@ void  prod2(int m, int n, int p,
          r = list1[t];  
          j = list2[t];  
          if (j != jold) {
-            jn = j*n;  
             /***** copy j-th column of sparse B to Btmp *****/ 
             for (k=0; k<n; ++k) { Btmp[k] = 0; }
             kstart = jcB[j];  kend = jcB[j+1];
@@ -139,6 +139,8 @@ void mexFunction(int nlhs,  mxArray        *plhs[],
    double   *Btmp, *listtmp; 
    int       m1, n1, m2, n2, mlist, nlist, isspA, isspB, k;
 
+   jcA=0; irA=0;
+   
 /* Check for proper number of arguments */
    if (nrhs < 4){
       mexErrMsgTxt("mexProd2nz: requires at least 4 input arguments."); }

@@ -19,7 +19,7 @@ void mexFunction(int nlhs, mxArray  *plhs[],
                  int nrhs, const mxArray  *prhs[] )
 
 {    double   *A, *nnz;  
-     mwIndex  *irA, *jcA; 
+     mwIndex  *jcA; 
 
      int      NZmax, m, n, isspA, j, k, jm, nnztmp;
 
@@ -43,7 +43,6 @@ void mexFunction(int nlhs, mxArray  *plhs[],
      A = mxGetPr(prhs[0]);
      isspA = mxIsSparse(prhs[0]); 
      if (isspA) { 
-        irA = mxGetIr(prhs[0]);      
         jcA = mxGetJc(prhs[0]);
         NZmax = jcA[n]; 
      }

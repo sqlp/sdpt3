@@ -71,7 +71,7 @@ void mexFunction(int nlhs,   mxArray  *plhs[],
 
      mwIndex   subs[2];
      mwSize    nsubs=2; 
-     int       mA, nA, m1, n1, m2, n2, j, index;    
+     int       mA, m1, n1, m2, n2, j, index;    
      int       rowidx, colidx, r, k, kstart, kend;
 
 

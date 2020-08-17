@@ -125,7 +125,7 @@ void mexFunction(int nlhs, mxArray  *plhs[],
 {    mxArray  *blk_cell_pr;
      mxArray  *tmparr[3];
      double   *A,  *B,  *blksizetmp, *P, *Q, *V; 
-     double   *ii, *jj, *vv, *vvtmp, *x1, *y1, *x2, *y2; 
+     double   *vvtmp, *x1, *y1, *x2, *y2; 
      mwIndex  *irA, *jcA, *irB, *jcB, *irV, *jcV;
      int      *blksize, *blksize2, *cumblksize, *blksize4;
      int       isspA, isspB, sym;

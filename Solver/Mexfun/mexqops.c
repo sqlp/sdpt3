@@ -85,7 +85,7 @@ void mexFunction(int nlhs, mxArray  *plhs[],
 {    double   *blksize, *x, *y, *z, *xtmp, *ytmp; 
      mwIndex  *irx, *jcx, *iry, *jcy; 
      int      *cumblk;
-     int   mblk, options; 
+     int   options; 
 
      int   l, n, k, r, numblk, cols;
 

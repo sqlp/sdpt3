@@ -169,8 +169,8 @@ void schurij2(double *Avec,
               mwIndex *nzlistAr, mwIndex *nzlistAc, mwIndex *cumblksize, 
               mwIndex *blkidx, int col, double *schurcol)
 
-{ int    r, ra, ca, rb, cb, l, k, kstart, kend, kstartnew, lstart, lend;
-  int    colcb1, idxrb, idxcb, idx1, idx2, idx3, idx4;
+{ int    ra, ca, rb, cb, l, k, kstart, kend, kstartnew, lstart, lend;
+  int    idxrb, idxcb, idx1, idx2, idx3, idx4;
   int    i, cblk, calk, firstime; 
   double tmp0, tmp1, tmp2, tmp3, tmp4; 
 
@@ -227,8 +227,8 @@ void schurij4( double *Avec,
                mwIndex *nzlistAr, mwIndex *nzlistAc, mwIndex *cumblksize, 
                mwIndex *blkidx, int col, double *schurcol)
 
-{ int    r, ra, ca, rb, cb, l, k, kstart, kend, kstartnew, lstart, lend;
-  int    colcb1, idxrb, idxcb, idx1, idx2, idx3, idx4; 
+{ int    ra, ca, rb, cb, l, k, kstart, kend, kstartnew, lstart, lend;
+  int    idxrb, idxcb, idx1, idx2, idx3, idx4; 
   int    i, cblk, calk, firstime;
   double tmp0, tmp1, tmp2, tmp3, tmp4;
   double hlf=0.5;  
@@ -291,9 +291,10 @@ void mexFunction(int nlhs,   mxArray  *plhs[],
      mwIndex  subs[2];
      mwSize   nsubs=2; 
      int      index, colend, type, isspU, isspV, numblk, nzP, existP; 
-     int      len, row, col, nU, nV, n, m, m1, idx1, idx2, l, k, nsub, n1, n2, opt, opt2;
+     int      len, row, col, nU, nV, n, m, m1, idx1, idx2, l, k, nsub, n1, n2, opt;
      int      kstart, kend, rb, cb, cblk, colcb, count; 
-     double   tmp; 
+
+     opt=0; Utmp=0; Vtmp=0; nzlistAc=0; nzlistAr=0; blknnz=0; cumblksize=0; blkidx=0; nzP=0; jcP=0; irP=0; jcV=0; irV=0;
 
 /* CHECK THE DIMENSIONS */
 
@@ -363,9 +364,10 @@ void mexFunction(int nlhs,   mxArray  *plhs[],
 /************************************
 * output 
 ************************************/
-
+    if (nlhs>=1) {
     plhs[0] = mxCreateDoubleMatrix(1,1,mxREAL); 
     nzschur = mxGetPr(plhs[0]); 
+    }
     if (nlhs==2) {
        nzP = (int) (0.2*m*m+5); 
        plhs[1] = mxCreateSparse(m,colend,nzP,mxREAL); 
@@ -454,11 +456,13 @@ void mexFunction(int nlhs,   mxArray  *plhs[],
 	}
     }
     
+    if (nlhs>=1) {
     nzschur[0] = count;
+    }
 
     mxFree(blksize); mxFree(nzlistAi); mxFree(nzlistAj); 
     mxFree(permA);   mxFree(idxstart); mxFree(schurcol); 
-    if (isspU) { 
+    if (isspU && isspV) { 
        mxFree(Utmp);     mxFree(Vtmp); 
        mxFree(nzlistAc); mxFree(nzlistAr); 
        mxFree(blknnz); mxFree(cumblksize); mxFree(blkidx); 
