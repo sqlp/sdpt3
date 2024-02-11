@@ -23,6 +23,7 @@ ISOCTAVE = exist('OCTAVE_VERSION','builtin');
 VERSION = [1,0.01]*sscanf(version,'%d.%d');
 if ISOCTAVE, prog = 'Octave'; else prog = 'Matlab'; end
 COMPUTER = computer;
+IS64BIT = strcmp(COMPUTER(end-1:end), '64');
 mext = mexext;
 
 %
