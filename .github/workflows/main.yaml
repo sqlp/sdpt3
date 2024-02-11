@@ -10,7 +10,10 @@ on:
       - master
 jobs:
   build-mex:
-    runs-on: [ubuntu-20.04,windows-2019,macos-12,macos-14]
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-20.04,windows-2019,macos-12,macos-14]
     steps:
     - name: Retrieve the source code
       uses: actions/checkout@v3
