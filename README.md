@@ -1,11 +1,20 @@
 ## SDPT3 version 4.0: MATLAB/Octave software for semidefinite-quadratic-linear programming
 ### [Kim-Chuan Toh](https://blog.nus.edu.sg/mattohkc/), [Michael J. Todd](https://people.orie.cornell.edu/miketodd/todd.html), and [Reha H. Tütüncü](https://www.math.cmu.edu/~reha/)
 
+#### [Click here](https://github.com/sqlp/sdpt3/releases/latest) to download the latest SDPT3 bundle, including MEX files for Windows, Linux, and MacOS (including Apple Silicon).
+
 SDPT3 is a Matlab package for solving convex optimization problems involving linear equations and inequalities, second-order cone constraints, and semidefinite constraints (linear matrix inequalities).
 
 This is an *unofficial* repository for SDPT3. The [official SDPT3 site](https://blog.nus.edu.sg/mattohkc/softwares/sdpt3/) and [another GitHub repository](https://github.com/Kim-ChuanToh/SDPT3) is administered by [Kim-Chuan Toh](https://blog.nus.edu.sg/mattohkc/), co-author of SDPT3 and professor of mathematics at the National University of Singapore.
 
-This repo is administered by [Michael Grant](http://cvxr.com/bio), the developer of [CVX](http://cvxr.com/cvx), a modeling framework for convex optimization that uses SDPT3 as a solver. *It is not our intent for this repo to become an independent fork of SDPT3*. To that end:
+This repo is administered by a community of MATLAB convex optimization contributors, including:
+
+- [Michael Grant](http://cvxr.com/bio),
+  the developer of [CVX](http://cvxr.com/cvx)
+- [Johan Löfberg](https://liu.se/en/employee/johlo46),
+  the developer of [YALMIP](https://yalmip.github.io/)
+
+*It is not our intent for this repo to become an independent fork of SDPT3*. To that end:
 
    + We will periodically monitor the [official site](https://blog.nus.edu.sg/mattohkc/softwares/sdpt3/) for updates, and incorporate any we find into this repo. 
    + Any improvements that we make will be submitted to the authors for inclusion in the official release.
@@ -31,5 +40,16 @@ Citation:
 
 This version of SDPT3 is distributed under the GNU General Public License 2.0. For more details, please see the included files [Copyright](https://github.com/sqlp/sdpt3/blob/master/Copyright) and [GNU\_General\_Public\_License\_v2](https://github.com/sqlp/sdpt3/blob/master/GNU_General_Public_License_v2).
 
-Michael C. Grant   
-[CVX Research, Inc.](http://cvxr.com)
+### Development notes
+
+As of April 2024, this repository uses
+[GitHub Actions](https://github.com/features/actions) to compile
+MEX files for Linux, Windows, and macOS (both Intel and Apple
+Silicon variants). Whenever a new Git tag is pushed to the
+repository, these actions automatically create `.zip` and `.tgz`
+bundles of that version of the code, including those compiled
+MEX files, and publishes those bundles to the
+[Releases](https://github.com/sqlp/sdpt3/releases) page.
+
+If you wish to contribute fixes or improvements to this repository, please feel free to submit a
+[pull request](https://github.com/sqlp/sdpt3/pulls).
