@@ -12,9 +12,8 @@ jobs:
   build-mex:
     runs-on: ${{ matrix.os }}
     strategy:
-      fail-fast: false
       matrix:
-        os: [ubuntu-latest,windows-latest,macos-latest,macos-14]
+        os: [ubuntu-20.04,windows-2019,macos-12,macos-14]
     steps:
     - name: Retrieve the source code
       uses: actions/checkout@v4
@@ -23,27 +22,22 @@ jobs:
     - name: Install MATLAB
       uses: matlab-actions/setup-matlab@v2
       with:
-        release: ${{ matrix.os == 'macos-14' && 'R2023b' || ( matrix.os == 'windows-latest' && 'R2021b' || 'R2021a' ) }}
-    - name: Build MATLAB MEX files
+        release: ${{ matrix.os == 'macos-14' && 'R2023b' || ( matrix.os == 'windows-2019' && 'R2021b' || 'R2021a' ) }}
+    - name: Build and test
       uses: matlab-actions/run-command@v2
       with:
-        command: install_sdpt3 -rebuild
-    - name: Run test
-      uses: matlab-actions/run-command@v2
-      with:
-        command: "install_sdpt3; sqlpdemo -noplot -nopause -exitiferror"
+        command: "install_sdpt3 -rebuild; sqlpdemo -noplot -nopause -exitiferror"
     - name: Upload MATLAB MEX files
       uses: actions/upload-artifact@v4
       with:
-        name: mexfiles-${{ matrix.os }}
+        name: mex-${{ matrix.os }}
         path: |
           Solver/Mexfun/*.mex*
   build-oct:
     runs-on: ${{ matrix.os }}
     strategy:
-      fail-fast: false
       matrix:
-        os: [ubuntu-latest,windows-latest,macos-latest,macos-14]
+        os: [ubuntu-20.04,windows-2019,macos-12,macos-14]
     steps:
     - name: Retrieve the source code
       uses: actions/checkout@v4
@@ -52,38 +46,29 @@ jobs:
     - name: Install Octave
       shell: bash
       run: |
-        if [ "${{ matrix.os }}" = ubuntu-latest ]; then
+        if [ "${{ matrix.os }}" = ubuntu-20.04 ]; then
           sudo apt update
           sudo apt install --no-install-recommends octave liboctave-dev
-        elif [ "${{ matrix.os }}" = windows-latest ]; then
+        elif [ "${{ matrix.os }}" = windows-2019 ]; then
           choco install octave.portable
         else
           brew install octave
         fi
-    - name: Build Octave MEX files
-      if: matrix.os != 'windows-latest'
-      run: octave --eval "install_sdpt3 -rebuild"
-    - name: Build Octave MEX files
-      if: matrix.os == 'windows-latest'
+    - name: Build and test (Unix)
+      if: matrix.os != 'windows-2019'
+      run: |
+        octave --eval "install_sdpt3 -rebuild; sqlpdemo -noplot -nopause -exitiferror"
+    - name: Build and test (Windows)
+      if: matrix.os == 'windows-2019'
       shell: cmd
       run: |
         set PATH=C:\ProgramData\chocolatey\bin;%PATH%
-        which octave-cli.exe
-        octave-cli.exe --no-gui --eval "install_sdpt3 -rebuild"
+        octave-cli.exe --no-gui --eval "install_sdpt3 -rebuild; sqlpdemo -noplot -nopause -exitiferror"
         if %errorlevel% neq 0 exit /b %errorlevel%
-    - name: Run test
-      if: matrix.os != 'windows-latest'
-      run: octave --eval "install_sdpt3; sqlpdemo -noplot -nopause -exitiferror"
-    - name: Run test
-      if: matrix.os == 'windows-latest'
-      shell: cmd
-      run: |
-        set PATH=C:\ProgramData\chocolatey\bin;%PATH%
-        octave-cli.exe --no-gui --eval "install_sdpt3; sqlpdemo -noplot -nopause -exitiferror"
     - name: Upload Octave MEX files
       uses: actions/upload-artifact@v4
       with:
-        name: mexfiles-oct-${{ matrix.os }}
+        name: oct-${{ matrix.os }}
         path: |
           Solver/Mexfun/*.mex
   package:
@@ -98,15 +83,12 @@ jobs:
       uses: actions/download-artifact@v4
     - name: Move artifacts into place
       run: |
-        mkdir -p Solver/Mexfun/o_lin  && mv mexfiles-oct-ubuntu-latest/* Solver/Mexfun/o_lin/
-        mkdir -p Solver/Mexfun/o_win  && mv mexfiles-oct-windows-latest/* Solver/Mexfun/o_win/
-        mkdir -p Solver/Mexfun/o_maci && mv mexfiles-oct-macos-latest/* Solver/Mexfun/o_maci/
-        mkdir -p Solver/Mexfun/o_maca && mv mexfiles-oct-macos-14/* Solver/Mexfun/o_maca/
-        mv mexfiles-ubuntu-latest/* Solver/Mexfun/
-        mv mexfiles-windows-latest/* Solver/Mexfun/
-        mv mexfiles-macos-latest/* Solver/Mexfun/
-        mv mexfiles-macos-14/* Solver/Mexfun/
-        rmdir mexfiles-*
+        mkdir -p Solver/Mexfun/o_lin  && mv oct-ubuntu-*/* Solver/Mexfun/o_lin/
+        mkdir -p Solver/Mexfun/o_win  && mv oct-windows-*/* Solver/Mexfun/o_win/
+        mkdir -p Solver/Mexfun/o_maci && mv oct-macos-12/* Solver/Mexfun/o_maci/
+        mkdir -p Solver/Mexfun/o_maca && mv oct-macos-14/* Solver/Mexfun/o_maca/
+        mv mex-*/* Solver/Mexfun/
+        rmdir mex-* oct-*
     - name: Show files, build archives
       run: |
         cd ..
@@ -125,8 +107,82 @@ jobs:
         path: |
           sdpt3.zip
           sdpt3.tgz
+  matlab-tests:
+    needs: package
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest,macos-latest,windows-latest,macos-14]
+    steps:
+    - name: Retrieve artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: bundles
+    - name: Unpack artifact
+      run: tar xfz sdpt3.tgz --strip-components=1
+    - name: Install latest MATLAB
+      uses: matlab-actions/setup-matlab@v2
+    - name: Run test
+      uses: matlab-actions/run-command@v2
+      with:
+        command: "install_sdpt3; sqlpdemo -noplot -nopause -exitiferror"
+  octave-tests:
+    needs: package
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest,windows-latest,macos-latest,macos-14]
+    steps:
+    - name: Retrieve artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: bundles
+    - name: Unpack artifact
+      run: tar xfz sdpt3.tgz --strip-components=1
+    - name: Install Octave, Snap, Flatpak
+      shell: bash
+      run: |
+        if [ "${{ matrix.os }}" = ubuntu-latest ]; then
+          sudo apt update
+          sudo apt install --no-install-recommends octave flatpak snapd
+        elif [ "${{ matrix.os }}" = windows-latest ]; then
+          choco install octave.portable
+        else
+          brew install octave
+        fi
+    - name: Run test
+      if: matrix.os != 'windows-latest'
+      run: octave --eval "install_sdpt3; sqlpdemo -noplot -nopause -exitiferror"
+    - name: Run test
+      if: matrix.os == 'windows-latest'
+      shell: cmd
+      run: |
+        set PATH=C:\ProgramData\chocolatey\bin;%PATH%
+        octave-cli.exe --no-gui --eval "install_sdpt3; sqlpdemo -noplot -nopause -exitiferror"
+    - name: Flatpak
+      if: matrix.os == 'ubuntu-latest'
+      run: |
+        flatpak remote-add --user --if-not-exists \
+                flathub https://flathub.org/repo/flathub.flatpakrepo
+        flatpak install --user -y flathub org.octave.Octave
+        flatpak run org.octave.Octave --eval "install_sdpt3; sqlpdemo -noplot -nopause -exitiferror"
+        flatpak uninstall --user -y org.octave.Octave
+    - name: Snapd
+      if: matrix.os == 'ubuntu-latest'
+      run: |
+        sudo snap install octave
+        snap run octave --eval "install_sdpt3; sqlpdemo -noplot -nopause -exitiferror"
+        sudo snap remove octave
+  publish:
+    needs: [matlab-tests,octave-tests]
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    steps:
+    - name: Retrieve artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: bundles
     - uses: softprops/action-gh-release@v2
-      if: startsWith(github.ref, 'refs/tags/')
       with:
         files: |
           sdpt3.tgz
