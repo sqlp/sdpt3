@@ -96,15 +96,15 @@ jobs:
         rmdir mexfiles-*
     - name: Show files, build archives
       run: |
-        mkdir ../archives
-        zip -r ../archives/sdpt3.zip . -x '.git/*' -x '.github/*'
-        tar cfz ../archives/sdpt3.tgz --exclude "./.git" --exclude "./.github" .
-        mv ../archives/* .
+        cd ..
+        zip -r sdpt3.zip sdpt3 -x 'sdpt3/.git/*' -x 'sdpt3/.github/*'
+        tar cfz sdpt3.tgz --exclude "sdpt3/.git" --exclude "sdpt3/.github" sdpt3
         echo "--------"
         tar tfz sdpt3.tgz
         echo "--------"
         zipinfo sdpt3.zip
         echo "--------"
+        mv sdpt3.tgz sdpt3.zip sdpt3
     - name: Upload bundles
       uses: actions/upload-artifact@v4
       with:
