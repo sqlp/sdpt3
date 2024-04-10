@@ -28,6 +28,10 @@ jobs:
       uses: matlab-actions/run-command@v2
       with:
         command: install_sdpt3 -rebuild
+    - name: Run test
+      uses: matlab-actions/run-command@v2
+      with:
+        command: "install_sdpt3; sqlpdemo -noplot -nopause -exitiferror"
     - name: Upload MATLAB MEX files
       uses: actions/upload-artifact@v4
       with:
@@ -67,6 +71,15 @@ jobs:
         which octave-cli.exe
         octave-cli.exe --no-gui --eval "install_sdpt3 -rebuild"
         if %errorlevel% neq 0 exit /b %errorlevel%
+    - name: Run test
+      if: matrix.os != 'windows-latest'
+      run: octave --eval "install_sdpt3; sqlpdemo -noplot -nopause -exitiferror"
+    - name: Run test
+      if: matrix.os == 'windows-latest'
+      shell: cmd
+      run: |
+        set PATH=C:\ProgramData\chocolatey\bin;%PATH%
+        octave-cli.exe --no-gui --eval "install_sdpt3; sqlpdemo -noplot -nopause -exitiferror"
     - name: Upload Octave MEX files
       uses: actions/upload-artifact@v4
       with:
