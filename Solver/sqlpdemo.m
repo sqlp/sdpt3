@@ -13,16 +13,29 @@
 %% Last Modified: 16 Sep 2004
 %%*****************************************************************
 
-function  sqlpdemo
+function sqlpdemo( varargin )
 
 randn('seed',0); rand('seed',0); %#ok
-feas = input('using feasible starting point? [yes = 1, no = 0] ');
-if (feas)
-    fprintf('\n  using feasible starting point\n\n');
+
+if isempty(varargin)
+    feas = input('using feasible starting point? [yes = 1, no = 0] ');
+    if (feas)
+        fprintf('\n  using feasible starting point\n\n');
+    else
+        fprintf('\n  using infeasible starting point\n\n');
+    end
+    do_plot = true;
+    do_pause = true;
+    exit_if_error = false;
 else
-    fprintf('\n  using infeasible starting point\n\n');
+    feas = any( strcmp( varargin, '-feas') );
+    do_plot = ~any( strcmp( varargin, '-noplot') );
+    do_pause = ~any( strcmp( varargin, '-nopause') );
+    exit_if_error = ~any( strcmp( varargin, '-exitiferror' ) );
 end
-pause(1);
+if do_pause;
+    pause(1);
+end
 
 ntrials = 1;
 % iterm = zeros(2,6); infom = zeros(2,6); timem = zeros(2,6);
@@ -45,7 +58,7 @@ for trials = 1:ntrials
         elseif (eg == 3);
             disp('******** Max-cut *********');
             N = 10;
-            B = graph(N);
+            B = adjmat(N);
             [blk,At,C,b,X0,y0,Z0] = maxcut(B,feas);
             text = 'Maxcut';
         elseif (eg == 4);
@@ -57,7 +70,7 @@ for trials = 1:ntrials
         elseif (eg == 5);
             disp('**** Lovasz theta function ****')
             N = 10;
-            B = graph(N);
+            B = adjmat(N);
             [blk,At,C,b,X0,y0,Z0] = thetaproblem(B,feas);
             text = 'Lovasz theta fn.';
         elseif (eg == 6);
@@ -86,11 +99,21 @@ for trials = 1:ntrials
             if (vers==1); legendtext{end+1} = 'HKM'; %#ok
             elseif (vers==2); legendtext{end+1} = 'NT'; %#ok
             end;
+            if exit_if_error,
+                if infoall.termcode ~= 0,
+                    error('Unexpected solver fail');
+                end
+            end
         end;
-        h = plotgap(Gap,Feas);
-        xlabel(text);
-        legend(h(h~=0),legendtext{:});
-        fprintf('\n**** press enter to continue ****\n'); pause
+        if do_plot
+            h = plotgap(Gap,Feas);
+            xlabel(text);
+            legend(h(h~=0),legendtext{:});
+        end
+        if do_pause
+            fprintf('\n**** press enter to continue ****\n');
+            pause
+        end
     end
 end
 %%

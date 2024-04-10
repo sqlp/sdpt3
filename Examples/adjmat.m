@@ -1,7 +1,8 @@
 %%******************************************************
-%% graph: generate random adjacency matrix.
+%% adjmat: generate random adjacency matrix.
+%% renamed from "graph" by Michael Grant
 %%      
-%%  B = graph(n,prob);
+%%  B = adjmat(n,prob);
 %%
 %%  see maxcut.m 
 %%
@@ -11,7 +12,7 @@
 %% Last modified: 2 Feb 01
 %%******************************************************
 
-   function B = graph(n,prob);
+   function B = adjmat(n,prob);
 
    B = zeros(n,n);
    if nargin <= 1; prob = 0.5; end;
