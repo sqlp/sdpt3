@@ -36,6 +36,7 @@ if ISOCTAVE,
     page_output_immediately( true, 'local' );
 end
 
+
 line = '---------------------------------------------------------------------------';
 fprintf( '\n%s\nSDPT3 installation script\n   Directory: %s\n   %s %s on %s\n%s\n', ...
     line, mpath, prog, version, COMPUTER, line );
@@ -45,6 +46,12 @@ if ~need_rebuild,
     mdir = '';
     if ISOCTAVE && VERSION >= 4,
         switch computer,
+        case 'x86_64-pc-linux-gnu',
+            mdir = 'o_lin';
+        case 'x86_64-apple-darwin21.6.0',
+            mdir = 'o_maci';
+        case 'aarch64-apple-darwin23.4.0',
+            mdir = 'o_maca';
         case 'i686-w64-mingw32',
             mdir = 'o_win';
         end
@@ -88,19 +95,23 @@ if need_rebuild,
     % Note the use of 0.01 here. That's because version 7 had more than 10
     % minor releases, so 7.10-7.14 need to be ordered after 7.01-7.09.
     libs = {};
-    flags = {'-O'};
+    flags = {};
     if ISOCTAVE,
         % Octave has mwSize and mwIndex hardcoded in mex.h as ints.
         % There is no definition for mwSignedIndex so include it here.  
         % This means that Octave ignores the -largeArrayDims flag.
+        cmd = 'mkoctfile';
+        flags{end+1} = '--mex';
         if VERSION < 3.08,
             flags{end+1} = '-DmwSignedIndex=int';
         end
     else
+        cmd = 'mex';
+        flags = {'-O'};
         if ispc,
-            flags = {'-DPC'};
+            flags{end+1} = '-DPC';
         elseif isunix,
-            flags = {'-DUNIX'};
+            flags{end+1} = '-DUNIX';
         end
         if strcmp(COMPUTER(end-1:end),'64') && ( VERSION >= 7.03 ),
             flags{end+1} = '-largeArrayDims';
@@ -132,18 +143,19 @@ if need_rebuild,
             libs{end+1} = '-lmwlapack';
         end
     end
-    libs = sprintf( ' %s', libs{:} );
-    flags = sprintf( ' %s', flags{:} );
     olddir = pwd;
     cd( mbase );
     failed = false;
-    fprintf( 'Template: mex%s <sources>%s\n', flags, libs );
+    fprintf( 'Template: %s%s <source>%s\n', cmd, sprintf( ' %s', flags{:} ), sprintf( ' %s', libs{:} ) );
     for i=1:length(targets64),
-        targ = targets64{i};
-        mfile = [ targ(1:min(strfind(targ,'.'))), mext ];
-        temp = [ 'mex ', flags, ' ', targets64{i}, '.c ', libs ];
-        fprintf( '   %s: %s\n', mfile, targ );
-        eval( temp, 'failed=true;' ); %#ok
+        targ = [ targets64{i}, '.', mext ];
+        sfile = [ targets64{i}, '.c' ];
+        fprintf( '   %s\n', targ );
+        if ISOCTAVE,
+            mkoctfile(flags{:}, sfile, libs{:});
+        else
+            mex(flags{:}, sfile, libs{:});
+        end
     end
     cd( olddir );
     if failed,
