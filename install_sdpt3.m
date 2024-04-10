@@ -34,8 +34,10 @@ if ISOCTAVE
         mdir = 'o_maci';
     case 'aarch64-apple-darwin23.4.0'
         mdir = 'o_maca';
-    case 'i686-w64-mingw32'
+    case 'x86_64-w64-mingw32'
         mdir = 'o_win';
+    otherwise
+        error(sprintf('Unexpected computer type: %s', COMPUTER));
     end
     mext = 'mex';
 else
