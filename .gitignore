@@ -1,2 +1,2 @@
-# Octave mex files
-Solver/Mexfun/*.mex
+Solver/Mexfun/*.mex*
+Solver/Mexfun/*/*.mex
