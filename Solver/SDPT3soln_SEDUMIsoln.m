@@ -63,6 +63,7 @@ end
 %% extract semidefinite cone blk
 %%
 per = [];
+sblk = [];
 len = 0;
 for p = 1:size(blk,1)
     pblk = blk(p,:);
