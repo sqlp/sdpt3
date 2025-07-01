@@ -32,7 +32,7 @@ for p = 1:size(blk,1)
             gamX = sqrt(qops(pblk,X{p},X{p},2));
             gamZ = sqrt(qops(pblk,Z{p},Z{p},2));
             tmp(1) = -sum(vpsub.*log(gamX(idx)));
-            tmp(2) = sum(vpsub.*log(gamZ(idx)) + vpsub);
+            tmp(2) = sum(vpsub.*log(gamZ(idx)) +vpsub.*(1-log(vpsub)));
         elseif strcmp(pblk{1},'l')
             logX = log(X{p}); logZ = log(Z{p});
             tmp(1) = -sum(vpsub.*logX(idx));
