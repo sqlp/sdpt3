@@ -217,8 +217,8 @@ if (use_LU)
         L.Lt = L.L';
     end
     if (solvesys)
-        [xx,resnrm,solve_ok] = symqmr(coeff,rhs,L,[],[],printlevel);
-        %%[xx,resnrm,solve_ok] = mybicgstab(coeff,rhs,L,[],[],printlevel);
+        %%[xx,resnrm,solve_ok] = symqmr(coeff,rhs,L,[],[],printlevel);
+        [xx,resnrm,solve_ok] = mybicgstab(coeff,rhs,L,[],[],printlevel);
         if (solve_ok<=0) && (printlevel)
             fprintf('\n  warning: bicgstab fails: %3.1f,',solve_ok);
         end
